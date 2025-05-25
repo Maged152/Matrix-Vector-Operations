@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "miDebuggerPath": "gdb",
+            "program": "${workspaceRoot}/build/gnu_debug/examples/example0.exe",
+            "MIMode": "gdb",
+        }
+
+    ]
+}
