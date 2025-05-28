@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.22)
-project(MVOp VERSION 0.0.1)
+cmake_minimum_required(VERSION 3.9)
+project(MVOp VERSION 0.0.1 LANGUAGES CXX CUDA)
 
 # Enable CTest and options only for the main project
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)

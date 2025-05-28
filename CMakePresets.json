@@ -23,68 +23,14 @@
             }
         },
         {
-            "name": "gnu_release",
-            "displayName": "gnu configuration for release mode",
-            "inherits": "release",
-            "description": "Configure with gnu release mode",
-            "generator": "MinGW Makefiles",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "gcc",
-                "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_CXX_FLAGS": "-O3 -DNDEBUG -flto",
-                "CMAKE_C_FLAGS": "-O3 -DNDEBUG -flto"
-            }
-        },
-        {
-            "name": "gnu_debug",
-            "displayName": "gnu configuration for debug mode",
-            "inherits": "debug",
-            "description": "Configure with gnu debug mode",
-            "generator": "MinGW Makefiles",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "gcc",
-                "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_CXX_FLAGS": "-O0 -g -Wall -Wextra",
-                "CMAKE_C_FLAGS": "-O0 -g -Wall -Wextra"
-            }
-        },
-        {
-            "name": "msvc_release",
-            "inherits": "release",
-            "displayName": "msvc configuration for release mode",
-            "description": "Configure with MSVC release mode",
-            "generator": "Visual Studio 17 2022",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_CXX_FLAGS": "/O2 /DNDEBUG /GL",
-                "CMAKE_C_FLAGS": "/O2 /DNDEBUG /GL"
-            }
-        },
-        {
-            "name": "msvc_debug",
-            "inherits": "debug",
-            "displayName": "msvc configuration for debug mode",
-            "description": "Configure with MSVC debug mode",
-            "generator": "Visual Studio 17 2022",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_CXX_FLAGS": "/Od /Zi /W4",
-                "CMAKE_C_FLAGS": "/Od /Zi /W4"
-            }
-        },
-        {
             "name": "cuda_release",
             "displayName": "CUDA configuration for release mode",
-            "inherits": "release",
             "description": "Configure with CUDA release mode",
+            "inherits": "release",
             "generator": "MinGW Makefiles",
             "cacheVariables": {
                 "CMAKE_CUDA_COMPILER": "nvcc",
                 "CMAKE_CUDA_FLAGS": "-O3 -arch=sm_52",
-                "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CUDA_STANDARD": "17"
             }
         },
@@ -96,30 +42,21 @@
             "generator": "MinGW Makefiles",
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "nvcc",
-                "CMAKE_CXX_FLAGS": "-G -O0"
+                "CMAKE_CXX_FLAGS": "-G -O0 -arch=sm_52",
+                "CMAKE_CUDA_STANDARD": "17"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "gnu_release",
-            "configurePreset": "gnu_release",
-            "description": "Build with gnu release"
+            "name": "cuda_release",
+            "configurePreset": "cuda_release",
+            "description": "Build with cuda release"
         },
         {
-            "name": "gnu_debug",
-            "configurePreset": "gnu_debug",
-            "description": "Build with gnu debug"
-        },
-        {
-            "name": "msvc_release",
-            "configurePreset": "msvc_release",
-            "description": "Build with msvc"
-        },
-        {
-            "name": "msvc_debug",
-            "configurePreset": "msvc_debug",
-            "description": "Build with msvc debug"
+            "name": "cuda_debug",
+            "configurePreset": "cuda_debug",
+            "description": "Build with cuda debug"
         }
     ]
 }
