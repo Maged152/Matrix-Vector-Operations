@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.9)
-project(MVOp VERSION 0.0.1 LANGUAGES CXX CUDA)
+cmake_minimum_required(VERSION 3.18)
+project(MVOp VERSION 1.0.0 LANGUAGES CXX CUDA)
+
+List (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+include(FetchDependencies)
 
 # Enable CTest and options only for the main project
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -21,19 +24,22 @@ set(INSTALL_RUN_DIR "dll")
 set(INSTALL_CFG_DIR "cmake")
 
 # Source files
-file(GLOB_RECURSE SOURCES source/*.cpp)
+file(GLOB_RECURSE cpu_source_files "${CMAKE_SOURCE_DIR}/source/*.cpp")
+file(GLOB_RECURSE gpu_source_files "${CMAKE_SOURCE_DIR}/source/*.cu")
 
 # Create the static library
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${cpu_source_files} ${gpu_source_files})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES 
-                        CXX_STANDARD 20
-                        CXX_EXTENSIONS OFF)
+                        CUDA_SEPARABLE_COMPILATION ON
+                        CUDA_ARCHITECTURES 86
+                        CUDA_STANDARD 20)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${INSTALL_INC_DIR}>
 )
+target_link_libraries(${PROJECT_NAME} qlm::ThreadPool)
 
 add_library(${namespace}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
@@ -66,7 +72,7 @@ install(EXPORT "${TARGETS_EXPORT_NAME}"
 install(
     DIRECTORY include/ dependencies/
     DESTINATION ${INSTALL_INC_DIR}
-    FILES_MATCHING PATTERN "*.h"
+    FILES_MATCHING PATTERN "*.hpp"
 )
 
 # Create the package configuration file
