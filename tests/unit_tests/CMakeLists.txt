@@ -13,14 +13,15 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 # Find all test source files
-file(GLOB_RECURSE TEST_SOURCES *.cpp)
+file(GLOB_RECURSE TEST_SOURCES source/*.cpp)
 
 # Create a target for each test file
 foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
     add_executable(${TEST_NAME} ${TEST_SOURCE})
-    target_link_libraries(${TEST_NAME} ${PARENT_PROJECT_NAME} GTest::gtest_main)
+    target_link_libraries(${TEST_NAME} ${PARENT_PROJECT_NAME} GTest::gtest_main ${PARENT_PROJECT_NAME} reference)
+    target_include_directories(${TEST_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
     gtest_discover_tests(${TEST_NAME})
 
