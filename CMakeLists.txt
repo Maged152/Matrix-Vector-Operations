@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.18)
 project(MVOp VERSION 1.0.0 LANGUAGES CXX CUDA)
 
 List (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-include(FetchDependencies)
 
 set(PARENT_PROJECT_NAME ${PROJECT_NAME})
+add_subdirectory(lib)
 
 # Enable CTest and options only for the main project
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)

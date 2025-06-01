@@ -30,7 +30,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${INSTALL_INC_DIR}>
 )
-target_link_libraries(${PROJECT_NAME} qlm::ThreadPool)
 
 add_library(${namespace}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 

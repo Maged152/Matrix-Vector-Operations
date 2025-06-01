@@ -1,16 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        v1.15.0
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
-include(GoogleTest)
+include(FetchDependencies)
 
 # Find all test source files
 file(GLOB_RECURSE TEST_SOURCES source/*.cpp)
@@ -20,8 +10,8 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
 
     add_executable(${TEST_NAME} ${TEST_SOURCE})
-    target_link_libraries(${TEST_NAME} ${PARENT_PROJECT_NAME} GTest::gtest_main ${PARENT_PROJECT_NAME} reference)
-    target_include_directories(${TEST_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    target_link_libraries(${TEST_NAME} ${PARENT_PROJECT_NAME} GTest::gtest_main ${PARENT_PROJECT_NAME} reference qlm::ThreadPool)
+    target_include_directories(${TEST_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
     gtest_discover_tests(${TEST_NAME})
 
