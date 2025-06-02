@@ -23,6 +23,7 @@ add_library(${PROJECT_NAME} STATIC ${cpu_source_files} ${gpu_source_files})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES 
                         CUDA_SEPARABLE_COMPILATION ON
+                        CUDA_RESOLVE_DEVICE_SYMBOLS ON
                         CUDA_ARCHITECTURES 86
                         CUDA_STANDARD 20)
 

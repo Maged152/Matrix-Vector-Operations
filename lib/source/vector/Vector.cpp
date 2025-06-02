@@ -99,12 +99,4 @@ namespace qlm
 			std::cout << std::fixed << std::setprecision(number_digits) << element << " ";
 		}
 	}
-
-	void qlm::Vector::Add(const Vector &src, Vector &dst) const
-	{
-		for (int i = 0; i < length; ++i)
-		{
-			dst.Set(i, this->Get(i) + src.Get(i));
-		}
-	}
 }
