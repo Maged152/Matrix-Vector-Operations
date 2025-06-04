@@ -1,57 +1,66 @@
 #pragma once
 
-#include "vector.hpp"
-
+#include <limits>
+#include "types.hpp"
 namespace test
 {
-	void Add(const qlm::Vector& src1, const qlm::Vector& src2, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Div(const qlm::Vector& src1, const qlm::Vector& src2, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Dot(const qlm::Vector& src1, const qlm::Vector& src2, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Mag(const qlm::Vector& src, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Angle(const qlm::Vector& src1, const qlm::Vector& src2, float& angle);
-	///////////////////////////////////////////////////////////////////////////
-	void Unit(const qlm::Vector& src, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Mul(const qlm::Vector& src1, const qlm::Vector& src2, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void ScalarAdd(const qlm::Vector& src1, const float val, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void ScalarDiv(const qlm::Vector& src1, const float val, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void ScalarMul(const qlm::Vector& src1, const float val, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void ScalarSub(const qlm::Vector& src1, const float val, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Sub(const qlm::Vector& src1, const qlm::Vector& src2, qlm::Vector& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Sum(const qlm::Vector& src, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Mean(const qlm::Vector& src, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Var(const qlm::Vector& src, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Cov(const qlm::Vector& src1, const qlm::Vector& src2, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Corr(const qlm::Vector& src1, const qlm::Vector& src2, float& dst);
-	//////////////////////////////////////////////////////////////////////////
-	void Min(const qlm::Vector& src, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void Max(const qlm::Vector& src, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void MinMax(const qlm::Vector& src, float& min, float& max);
-	///////////////////////////////////////////////////////////////////////////
-	void Norm(const qlm::Vector& src, qlm::Norm norm, float& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void ArgMin(const qlm::Vector& src, size_t& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void ArgMax(const qlm::Vector& src, size_t& dst);
-	///////////////////////////////////////////////////////////////////////////
-	void ArgMinMax(const qlm::Vector& src, size_t& min, size_t& max);
-	///////////////////////////////////////////////////////////////////////////
-	void WeightedSum(const qlm::Vector& src, const qlm::Vector& weights, const float bias, float& dst);
-	///////////////////////////////////////////////////////////////////////////
+    class Vector 
+    {
+        private:
+            float* data = nullptr;
+            int length = 0;
+
+        public:
+            Vector();
+            Vector(int length);
+            Vector(const Vector& other);
+            ~Vector();
+
+        public:
+            void Set(const int i, const float value);
+            float Get(const int i) const;
+            int Length() const;
+            void Alloc(const int len);
+        
+        public:
+            // print vector
+            void Print() const;
+            // random initialization
+            void RandomInit(const float min_value, const float max_value);
+
+        public:
+            // vector operations
+            void Dot(const Vector& src, float& dst) const;
+            void Mag(float& dst) const;
+            void Unit(Vector& dst) const;
+            void Angle(const Vector& src, float& dst) const;
+            void Sum(float& dst) const;
+            void Mean(float& dst) const;
+            void Var(float& dst) const;
+            void Min(float& dst) const;
+            void Max(float& dst) const;
+            void MinMax(float& dst_min, float& dst_max) const;
+            void Norm(const qlm::Norm norm,float& dst) const;
+            void ArgMin(size_t& dst) const;
+            void ArgMax(size_t& dst) const;
+            void ArgMinMax(size_t& dst_min, size_t& dst_max) const;
+            void WeightedSum(const Vector& weights, const float bias, float& dst) const;
+
+        public:
+            // vector-vector operations
+            void Add(const Vector& src, Vector& dst) const;
+            void Sub(const Vector& src, Vector& dst) const;
+            void Mul(const Vector& src, Vector& dst) const;
+            void Div(const Vector& src, Vector& dst) const;
+            void Cov(const Vector& src, float& dst) const;
+            void Corr(const Vector& src, float& dst) const;
+        public:
+            // Vector-scalar operations
+            void Add(const float src, Vector& dst) const;
+            void Sub(const float src, Vector& dst) const;
+            void Mul(const float src, Vector& dst) const;
+            void Div(const float src, Vector& dst) const;
+
+            //--------------------------------------------------------------//
+    };
 }

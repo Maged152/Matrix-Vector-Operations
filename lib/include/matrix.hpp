@@ -36,26 +36,26 @@ namespace qlm
 
         public:
             // matrix-matrix operations
-            Status Add(const Matrix& src, Matrix& dst) const;
-            Status Sub(const Matrix& src, Matrix& dst) const;
-            Status Mul(const Matrix& src, Matrix& dst) const;
-            Status Div(const Matrix& src, Matrix& dst) const;
-            Status Dot(const Matrix& src, Matrix& dst) const;
-            Status Transpose(Matrix& dst) const;
+            void Add(const Matrix& src, Matrix& dst) const;
+            void Sub(const Matrix& src, Matrix& dst) const;
+            void Mul(const Matrix& src, Matrix& dst) const;
+            void Div(const Matrix& src, Matrix& dst) const;
+            void Dot(const Matrix& src, Matrix& dst) const;
+            void Transpose(Matrix& dst) const;
 
         public:
             // matrix-vector operations
-            Status Add(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
-            Status Sub(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
-            Status Mul(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
-            Status Div(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
-            Status Dot(const Vector& src, Vector& dst) const;
+            void Add(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
+            void Sub(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
+            void Mul(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
+            void Div(const Vector& src, Matrix& dst, const BroadCast& broad_cast) const;
+            void Dot(const Vector& src, Vector& dst) const;
 
         public:
             // matrix-scalar operations
-            Status Add(const float src, Matrix& dst) const;
-            Status Sub(const float src, Matrix& dst) const;
-            Status Mul(const float src, Matrix& dst) const;
-            Status Div(const float src, Matrix& dst) const;
+            void Add(const float src, Matrix& dst) const;
+            void Sub(const float src, Matrix& dst) const;
+            void Mul(const float src, Matrix& dst) const;
+            void Div(const float src, Matrix& dst) const;
     };
 }
