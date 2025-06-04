@@ -6,7 +6,7 @@ namespace test
 {
     class Vector 
     {
-        private:
+        public:
             float* data = nullptr;
             int length = 0;
 

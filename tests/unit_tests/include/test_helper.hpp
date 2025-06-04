@@ -1,4 +1,5 @@
 #include "thread_pool.hpp"
+#include "reference.hpp"
 #include <string>
 #include "print_types.hpp"
 #include <gtest/gtest.h>
@@ -46,23 +47,23 @@ namespace test
 			                        << ANSI_TXT_DFT << std::endl;
 	}
 
-	inline void PrintTime(const qlm::Timer<qlm::usec>& ref, const qlm::Timer<qlm::usec>& lib)
+	inline void PrintTime(const qlm::Timer<qlm::usec>& cpu, const qlm::Timer<qlm::usec>& gpu)
 	{
-		std::cout << COUT_GTEST_MGT_TIME << "lib time"
+		std::cout << COUT_GTEST_MGT_TIME << "gpu time"
 			                             << " = "
-			                             << lib.ElapsedString()
+			                             << gpu.ElapsedString()
 		                                 << ANSI_TXT_DFT << std::endl;
 
-		std::cout << COUT_GTEST_MGT_TIME << "ref time"
+		std::cout << COUT_GTEST_MGT_TIME << "cpu time"
 			                             << " = "
-			                             << ref.ElapsedString()
+			                             << cpu.ElapsedString()
 			                             << ANSI_TXT_DFT << std::endl;
 
-		if (lib.Elapsed() < ref.Elapsed())
+		if (gpu.Elapsed() < cpu.Elapsed())
 		{
 			std::cout << COUT_GTEST_GRN_FAST << "faster by "
 				                             << " = "
-				                             << ((ref.Elapsed() - lib.Elapsed()) / lib.Elapsed()) * 100
+				                             << ((cpu.Elapsed() - gpu.Elapsed()) / gpu.Elapsed()) * 100
 				                             << " %"
 				                             << ANSI_TXT_DFT << std::endl;
 		}
@@ -70,7 +71,7 @@ namespace test
 		{
 			std::cout << COUT_GTEST_RED_SLOW << "slower by "
 				                             << " = "
-				                             << ((lib.Elapsed() - ref.Elapsed()) / ref.Elapsed()) * 100
+				                             << ((gpu.Elapsed() - cpu.Elapsed()) / cpu.Elapsed()) * 100
 				                             << " %"
 				                             << ANSI_TXT_DFT << std::endl;
 		}
@@ -79,7 +80,7 @@ namespace test
 	}
 
 	// compare
-	inline bool TestCompare(const qlm::Matrix& mat1, const qlm::Matrix& mat2, const float threshold)
+	inline bool TestCompare(const test::Matrix& mat1, const qlm::Matrix& mat2, const float threshold)
 	{
 		for (int i = 0; i < mat1.Rows() * mat1.Columns(); i++)
 		{
@@ -91,7 +92,7 @@ namespace test
 
 		return true;
 	}
-	inline bool TestCompare(const qlm::Vector& vec1, const qlm::Vector& vec2, const float threshold)
+	inline bool TestCompare(const test::Vector& vec1, const qlm::Vector& vec2, const float threshold)
 	{
 		for (int i = 0; i < vec1.Length(); i++)
 		{

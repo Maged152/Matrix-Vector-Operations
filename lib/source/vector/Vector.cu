@@ -120,4 +120,17 @@ namespace qlm
 		}
 		std::cout << std::endl;
 	}
+
+	// copy data from CPU to GPU
+	void Vector::FromCPU(const float* src, const int len)
+	{
+		if (data != nullptr)
+		{
+			cudaFree(data);
+		}
+		
+		length = len;
+		cudaMalloc(&data, length * sizeof(float));
+		cudaMemcpy(data, src, length * sizeof(float), cudaMemcpyHostToDevice);
+	}
 }

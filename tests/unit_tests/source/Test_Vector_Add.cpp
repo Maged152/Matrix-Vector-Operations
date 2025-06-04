@@ -24,34 +24,42 @@ TEST_P(VectorAdd, Test_VectorAdd)
     test::PrintParameter(min_val, "min_val");
     test::PrintParameter(max_val, "max_val");
 
-    qlm::Timer<qlm::usec> ref;
-    qlm::Timer<qlm::usec> lib;
+    qlm::Timer<qlm::usec> timer_cpu;
+    qlm::Timer<qlm::usec> timer_gpu;
 
-    qlm::Vector src1{ length };
-    qlm::Vector src2{ length };
+    // cpu vectors
+    test::Vector src1_cpu{ length };
+    test::Vector src2_cpu{ length };
+    test::Vector dst_cpu{ length };
 
-    qlm::Vector dst_ref{ length };
-    qlm::Vector dst_lib{ length };
+    // gpu vectors
+    qlm::Vector src1_gpu{ length };
+    qlm::Vector src2_gpu{ length };
+    qlm::Vector dst_gpu{ length };
 
     // random initialization
-    src1.RandomInit(min_val, max_val);
-    src2.RandomInit(min_val, max_val);
+    src1_cpu.RandomInit(min_val, max_val);
+    src2_cpu.RandomInit(min_val, max_val);
 
-    // run test code
-    ref.Start();
-    test::Add(src1, src2, dst_ref);
-    ref.End();
+    // copy to gpu
+    src1_gpu.FromCPU(src1_cpu.data, length);
+    src2_gpu.FromCPU(src2_cpu.data, length);
 
-    // run lib code
-    lib.Start();
-    src1.Add(src2, dst_lib);
-    lib.End();
+    // run cpu code
+    timer_cpu.Start();
+    src1_cpu.Add(src2_cpu, dst_cpu);
+    timer_cpu.End();
+
+    // run gpu code
+    timer_gpu.Start();
+    src1_gpu.Add(src2_gpu, dst_gpu);
+    timer_gpu.End();
 
     // print time
-    test::PrintTime(ref, lib);
+    test::PrintTime(timer_cpu, timer_gpu);
 
     // compare the results
-    bool res = test::TestCompare(dst_ref, dst_lib, threshold);
+    bool res = test::TestCompare(dst_cpu, dst_gpu, threshold);
 
     EXPECT_EQ(res, true);
 }
