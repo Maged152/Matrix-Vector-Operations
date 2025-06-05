@@ -25,6 +25,7 @@ namespace qlm
             int Length() const;
             void Alloc(const int len);
             void FromCPU(const float* src, const int len);
+            void ToCPU(float* dst, const int len) const;
         
         public:
             // print vector

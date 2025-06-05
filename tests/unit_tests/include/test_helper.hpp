@@ -92,11 +92,15 @@ namespace test
 
 		return true;
 	}
+
 	inline bool TestCompare(const test::Vector& vec1, const qlm::Vector& vec2, const float threshold)
 	{
+		test::Vector vec_gpu{ vec2.Length() };
+		vec2.ToCPU(vec_gpu.data, vec_gpu.Length());
+
 		for (int i = 0; i < vec1.Length(); i++)
 		{
-			if (std::abs(vec1.Get(i) - vec2.Get(i)) > threshold)
+			if (std::abs(vec1.Get(i) - vec_gpu.Get(i)) > threshold)
 			{
 				return false;
 			}

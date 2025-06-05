@@ -32,22 +32,22 @@ namespace qlm
 			cudaFree(data);
 	}
 
-	// Setter for individual element (host to device)
+	// Setter for individual element
     void Vector::Set(const int i, const float value) 
 	{
         if (i >= 0 && i < length)
         {
-            cudaMemcpy(data + i, &value, sizeof(float), cudaMemcpyHostToDevice);
+            data[i] = value;
         }
     }
 
-    // Getter for individual element (device to host)
+    // Getter for individual element
     float Vector::Get(const int i) const
     {
         float value = std::numeric_limits<float>::signaling_NaN();
         if (i >= 0 && i < length)
         {
-            cudaMemcpy(&value, data + i, sizeof(float), cudaMemcpyDeviceToHost);
+			value = data[i];
         }
         return value;
     }
@@ -132,5 +132,18 @@ namespace qlm
 		length = len;
 		cudaMalloc(&data, length * sizeof(float));
 		cudaMemcpy(data, src, length * sizeof(float), cudaMemcpyHostToDevice);
+	}
+
+	// copy data from GPU to CPU
+	void Vector::ToCPU(float* dst, const int len) const
+	{
+		if (data != nullptr && dst != nullptr && len == length)
+		{
+			cudaMemcpy(dst, data, length * sizeof(float), cudaMemcpyDeviceToHost);
+		}
+		else
+		{
+			std::cerr << "Error: Invalid parameters in ToCPU." << std::endl;
+		}
 	}
 }
