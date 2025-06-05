@@ -9,7 +9,7 @@ namespace test
 
     class Matrix 
     {
-        private:
+        public:
             float* data = nullptr;
             int columns = 0;
             int rows = 0;
@@ -22,9 +22,7 @@ namespace test
 
         public:
             void Set(const int r, const int c, const float value);
-            void Set(const int i, const float value);
             float Get(const int r, const int c) const;
-            float Get(const int i) const;
             int Columns() const;
             int Rows() const;
 

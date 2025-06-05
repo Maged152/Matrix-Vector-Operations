@@ -82,11 +82,17 @@ namespace test
 	// compare
 	inline bool TestCompare(const test::Matrix& mat1, const qlm::Matrix& mat2, const float threshold)
 	{
-		for (int i = 0; i < mat1.Rows() * mat1.Columns(); i++)
+		test::Matrix mat_gpu{ mat2.Rows(), mat2.Columns() };
+		mat2.ToCPU(mat_gpu.data, mat_gpu.Rows(), mat_gpu.Columns());
+
+		for (int r = 0; r < mat1.Rows(); r++)
 		{
-			if (std::abs(mat1.Get(i) - mat2.Get(i)) > threshold)
+			for (int c = 0; c < mat1.Columns(); c++)
 			{
-				return false;
+				if (std::abs(mat1.Get(r, c) - mat_gpu.Get(r, c)) > threshold)
+				{
+					return false;
+				}
 			}
 		}
 
