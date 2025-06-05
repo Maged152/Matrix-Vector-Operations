@@ -26,12 +26,6 @@ namespace qlm
             void Alloc(const int len);
             void FromCPU(const float* src, const int len);
             void ToCPU(float* dst, const int len) const;
-        
-        public:
-            // print vector
-            void Print() const;
-            // random initialization
-            void RandomInit(const float min_value, const float max_value);
 
         public:
             // vector operations

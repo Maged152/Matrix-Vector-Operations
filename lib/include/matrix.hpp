@@ -13,6 +13,7 @@ namespace qlm
             float* data = nullptr;
             int columns = 0;
             int rows = 0;
+            size_t stride = 0; 
 
         public:
             Matrix();
@@ -22,17 +23,13 @@ namespace qlm
 
         public:
             void Set(const int r, const int c, const float value);
-            void Set(const int i, const float value);
             float Get(const int r, const int c) const;
-            float Get(const int i) const;
             int Columns() const;
             int Rows() const;
-
-        public:
-            // print matrix
-            void Print() const;
-            // random initialization
-            void RandomInit(const float min_value, const float max_value);
+            int Stride() const;
+            void Alloc(const int rows, const int columns);
+            void FromCPU(const float* src, const int rows, const int columns);
+            void ToCPU(float* dst, const int rows, const int columns) const;
 
         public:
             // matrix-matrix operations
