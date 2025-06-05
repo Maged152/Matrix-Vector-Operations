@@ -1,48 +1,43 @@
 # MVOp
-MVOp is a comprehensive template designed to streamline the process of building a library using `CMake`. This template provides a solid foundation, including a clear and organized directory structure, essential CMake configuration files, and best practices for library development. With MVOp, developers can quickly set up a new project with consistent build settings and focus on writing their library code, rather than spending time on initial configuration. Whether you are developing a static or shared library, this template ensures a smooth and efficient start to your CMake-based project.
 
-# Features
-* Build the Library: Easily compile your library with CMake.
-* Examples: Include example code to demonstrate how to use your library.
-* Tests Using Google Test: Integrate unit tests using Google Test framework to ensure your library works as expected.
-* Documentation Using Doxygen: Generate professional documentation for your codebase using Doxygen.
-* Install: Install your library and its headers to a specified location.
+MVOp is a high-performance C++ library for **vector and matrix operations** that **requires CUDA**.  
+All computations are performed on the GPU, leveraging CUDA for maximum performance on large-scale linear algebra tasks. The API is designed to be clean and easy to use for GPU-accelerated workflows.
 
-# How to Use
-* Clone the repository.
-* Rename the project:
-   * Replace all instances of `MVOp` with your project name.
-* Make sure your project follows the same directory structure.
+---
 
-# Build & Targets
+## Features
 
-## Configure 
-    $ cmake -S <source_dir> -B <build_dir>
+- **Vector and Matrix Operations:** Efficient GPU implementations for addition, multiplication, dot product, norms, and more.
+- **CUDA-Only:** All operations require a CUDA-capable GPU and NVIDIA CUDA Toolkit.
+- **CMake Presets:** Easy configuration for CUDA builds.
+- **Installable:** Standard CMake install targets for easy integration.
 
-You can use `presets`
+---
 
-    $ cmake -S <source_dir> --preset <preset_name>
+## How to Use
 
-To know the existing presets
+1. **Clone the repository.**
+2. **Build with CMake:**  
+   ```
+   cmake -S <source_dir> -B <build_dir>
+   cmake --build <build_dir>
+   ```
+3. **Install:**  
+   ```
+   cmake --install <build_dir> --prefix <install_dir>
+   ```
 
-    $ cmake -S <source_dir> --list-presets
+---
 
+## Requirements
 
-## Build
-    $ cmake --build <build_dir>
+- NVIDIA CUDA-capable GPU
+- CUDA Toolkit (tested with CUDA 11+)
+- CMake 3.18 or newer
+- C++20 compiler (MSVC, GCC, or Clang with CUDA support)
 
-## Install
-    $ cmake --install <build_dir> --prefix <install_dir>
+---
 
-## Generate Documentations
-    $ cmake --build <build_dir> --target documentation
+## License
 
-## Running Tests
-### Run a specific test
-    $ cmake --build <build_dir> --target Test_<test_name>
-
-### Run all tests
-    $ ctest --test-dir <build_dir>
-
-## Examples
-    $ cmake --build <build_dir> --target Example_<example_name>
+MIT License (or your chosen license)
