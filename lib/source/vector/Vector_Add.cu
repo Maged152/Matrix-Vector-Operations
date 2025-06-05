@@ -17,5 +17,6 @@ namespace qlm
         const int block_size = 256;
         const int num_blocks = (length + block_size - 1) / block_size;
         VectorAdd_Cuda<<<num_blocks, block_size>>>(data, src.data, dst.data, length);
+        cudaDeviceSynchronize(); // Ensure the kernel execution is complete
 	}
 }
