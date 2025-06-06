@@ -1,8 +1,4 @@
 #include "matrix.hpp"
-#include <random>
-#include <iostream>
-#include <iomanip>
-#include <functional>
 #include <curand_kernel.h>
 
 
@@ -16,6 +12,7 @@ namespace qlm
 	Matrix::Matrix(int rows, int columns) : rows(rows), columns(columns) 
 	{
 		cudaMallocPitch(&data, &stride, columns * sizeof(float), rows);
+		stride /= sizeof(float);
 	}
 
 	// Copy constructor
@@ -23,6 +20,7 @@ namespace qlm
 	{
 		cudaMallocPitch(&data, &stride, columns * sizeof(float), rows);
         cudaMemcpy2D(data, stride, other.data, other.stride, columns * sizeof(float), rows, cudaMemcpyDeviceToDevice);
+		stride /= sizeof(float);
 	}
 
 	// Destructor
@@ -45,7 +43,7 @@ namespace qlm
 	// Getter for individual element
 	float Matrix::Get(int row, int col) const 
 	{
-        float value = std::numeric_limits<float>::signaling_NaN(); 
+        float value = -1.0f; 
 		if (row >= 0 && row < rows && col >= 0 && col < columns)
 		{
 			return data[row * stride + col];
@@ -77,6 +75,7 @@ namespace qlm
         this->rows = rows;
         this->columns = columns;
         cudaMallocPitch(&data, &stride, columns * sizeof(float), rows);
+		stride /= sizeof(float);
     }
     
     void Matrix::FromCPU(const float* src, const int rows, const int columns)
@@ -84,14 +83,15 @@ namespace qlm
         Alloc(rows, columns);
         if (src != nullptr)
         {
-            cudaMemcpy2D(data, stride, src, columns, columns * sizeof(float), rows, cudaMemcpyHostToDevice);
+            cudaMemcpy2D(data, stride * sizeof(float), src, columns * sizeof(float), columns * sizeof(float), rows, cudaMemcpyHostToDevice);
         }
     }
-    void  Matrix::ToCPU(float* dst, const int rows, const int columns) const
+    
+	void  Matrix::ToCPU(float* dst, const int rows, const int columns) const
     {
         if (dst != nullptr && data != nullptr)
         {
-            cudaMemcpy2D(dst, columns, data, stride, columns * sizeof(float), rows, cudaMemcpyDeviceToHost);
+            cudaMemcpy2D(dst, columns * sizeof(float), data, stride * sizeof(float), columns * sizeof(float), rows, cudaMemcpyDeviceToHost);
         }
     }
 }
