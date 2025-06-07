@@ -40,12 +40,12 @@ TEST_P(MatrixDot, Test_MatrixDot)
     qlm::Matrix dst_gpu{ rows, rows };
 
     // random initialization
-    src1_cpu.RandomInit(min_val, max_val);
-    src2_cpu.RandomInit(min_val, max_val);
+    src1_cpu.LinearInit();
+    src2_cpu.LinearInit();
 
     // copy to gpu
-    src1_gpu.FromCPU(src1_cpu.data, rows, cols);
-    src2_gpu.FromCPU(src2_cpu.data, cols, rows);
+    src1_gpu.FromCPU(src1_cpu.data, src1_cpu.rows, src1_cpu.columns);
+    src2_gpu.FromCPU(src2_cpu.data, src2_cpu.rows, src2_cpu.columns);
 
     // run cpu code
     timer_cpu.Start();
@@ -71,8 +71,8 @@ TEST_P(MatrixDot, Test_MatrixDot)
 INSTANTIATE_TEST_CASE_P(
     Test_MatrixDot, MatrixDot,
     ::testing::Combine(
-        ::testing::Values(16),//7, 100, 5000, 20000, 200000),
-        ::testing::Values(16),//7, 100, 5000, 20000, 200000),
+        ::testing::Values(7, 100, 500, 2000),
+        ::testing::Values(7, 100, 500, 2000),
         ::testing::Values(0.0f),
         ::testing::Values(100.0f)
     ));

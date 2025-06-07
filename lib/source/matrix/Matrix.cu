@@ -11,22 +11,20 @@ namespace qlm
 	// Parameterized constructor
 	Matrix::Matrix(int rows, int columns) : rows(rows), columns(columns) 
 	{
-		cudaMallocPitch(&data, &stride, columns * sizeof(float), rows);
-		stride /= sizeof(float);
+		cudaMalloc(&data, rows * columns * sizeof(float));
 	}
 
 	// Copy constructor
 	Matrix::Matrix(const Matrix& other) : columns(other.columns), rows(other.rows) 
 	{
-		cudaMallocPitch(&data, &stride, columns * sizeof(float), rows);
-        cudaMemcpy2D(data, stride, other.data, other.stride, columns * sizeof(float), rows, cudaMemcpyDeviceToDevice);
-		stride /= sizeof(float);
+		cudaMalloc(&data, rows * columns * sizeof(float));
+        cudaMemcpy(data, other.data, rows * columns * sizeof(float), cudaMemcpyDeviceToDevice);
 	}
 
 	// Destructor
 	Matrix::~Matrix() 
 	{
-		rows = columns = stride =0;
+		rows = columns = stride = 0;
 		if (data != nullptr)
 			cudaFree(data);
 	}
@@ -36,7 +34,7 @@ namespace qlm
 	{
 		if (row >= 0 && row < rows && col >= 0 && col < columns)
 		{
-            data[row * stride + col] = value;
+            data[row * columns + col] = value;
 		}
 	}
 
@@ -46,7 +44,7 @@ namespace qlm
         float value = -1.0f; 
 		if (row >= 0 && row < rows && col >= 0 && col < columns)
 		{
-			return data[row * stride + col];
+			return data[row * columns + col];
 		}
 		return value;
 	}
@@ -74,24 +72,22 @@ namespace qlm
             cudaFree(data);
         this->rows = rows;
         this->columns = columns;
-        cudaMallocPitch(&data, &stride, columns * sizeof(float), rows);
-		stride /= sizeof(float);
+        cudaMalloc(&data, rows * columns * sizeof(float));
     }
     
-    void Matrix::FromCPU(const float* src, const int rows, const int columns)
+    void Matrix::FromCPU(const float* src, const int num_rows, const int num_columns)
     {
-        Alloc(rows, columns);
-        if (src != nullptr)
-        {
-            cudaMemcpy2D(data, stride * sizeof(float), src, columns * sizeof(float), columns * sizeof(float), rows, cudaMemcpyHostToDevice);
-        }
+		if (rows != num_rows || columns != num_columns || data == nullptr)
+        	Alloc(num_rows, num_columns);
+
+		cudaMemcpy(data, src, rows * columns * sizeof(float), cudaMemcpyHostToDevice);
     }
     
-	void  Matrix::ToCPU(float* dst, const int rows, const int columns) const
+	void Matrix::ToCPU(float* dst, const int rows, const int columns) const
     {
         if (dst != nullptr && data != nullptr)
         {
-            cudaMemcpy2D(dst, columns * sizeof(float), data, stride * sizeof(float), columns * sizeof(float), rows, cudaMemcpyDeviceToHost);
+			cudaMemcpy(dst, data, rows * columns * sizeof(float), cudaMemcpyDeviceToHost);
         }
     }
 }

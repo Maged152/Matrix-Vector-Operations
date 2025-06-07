@@ -77,6 +77,18 @@ namespace test
 		}
 	}
 
+	void test::Matrix::LinearInit()
+	{
+		for (int r = 0; r < rows; r++)
+		{
+			for (int c = 0; c < columns; c++)
+			{
+				int i = r * columns + c;
+				this->Set(r, c, static_cast<float>(i));
+			}
+		}
+	}
+	
 	void Matrix::Print() const 
 	{
 		for (int r = 0; r < rows; r++)

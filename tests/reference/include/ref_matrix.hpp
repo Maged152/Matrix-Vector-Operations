@@ -31,6 +31,7 @@ namespace test
             void Print() const;
             // random initialization
             void RandomInit(const float min_value, const float max_value);
+            void LinearInit();
 
         public:
             // matrix-matrix operations
