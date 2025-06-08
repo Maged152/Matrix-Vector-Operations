@@ -5,8 +5,9 @@
 
 // Define the test parameters types
 struct MatrixDot : ::testing::TestWithParam<std::tuple<
-    int,   // rows
-    int,   // cols
+    int,   // d0
+    int,   // d1
+    int,   // d2
     float, // min value
     float  // max value
     >>
@@ -18,11 +19,12 @@ TEST_P(MatrixDot, Test_MatrixDot)
 {
     constexpr float threshold = 0.0f;
     // extract the parameters
-    auto& [rows, cols, min_val, max_val] = GetParam();
+    auto& [d0, d1, d2, min_val, max_val] = GetParam();
 
     // print the parameters
-    test::PrintParameter(rows, "rows");
-    test::PrintParameter(cols, "cols");
+    test::PrintParameter(d0, "d0");
+    test::PrintParameter(d1, "d1");
+    test::PrintParameter(d2, "d2");
     test::PrintParameter(min_val, "min_val");
     test::PrintParameter(max_val, "max_val");
 
@@ -30,14 +32,14 @@ TEST_P(MatrixDot, Test_MatrixDot)
     qlm::Timer<qlm::usec> timer_gpu;
 
     // cpu Matrices
-    test::Matrix src1_cpu{ rows, cols };
-    test::Matrix src2_cpu{ cols, rows };
-    test::Matrix dst_cpu{ rows, rows };
+    test::Matrix src1_cpu{ d0, d1 };
+    test::Matrix src2_cpu{ d1, d2 };
+    test::Matrix dst_cpu{ d0, d2 };
 
     // gpu Matrices
-    qlm::Matrix src1_gpu{ rows, cols };
-    qlm::Matrix src2_gpu{ cols, rows };
-    qlm::Matrix dst_gpu{ rows, rows };
+    qlm::Matrix src1_gpu{  d0, d1 };
+    qlm::Matrix src2_gpu{ d1, d2 };
+    qlm::Matrix dst_gpu{ d0, d2 };
 
     // random initialization
     src1_cpu.LinearInit();
@@ -71,6 +73,7 @@ TEST_P(MatrixDot, Test_MatrixDot)
 INSTANTIATE_TEST_CASE_P(
     Test_MatrixDot, MatrixDot,
     ::testing::Combine(
+        ::testing::Values(7, 100, 500, 2000),
         ::testing::Values(7, 100, 500, 2000),
         ::testing::Values(7, 100, 500, 2000),
         ::testing::Values(0.0f),
