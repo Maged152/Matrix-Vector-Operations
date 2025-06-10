@@ -1,29 +1,59 @@
 #include "matrix.hpp"
 
+#define TILE_SIZE 16
 namespace qlm
 {
     __global__ void MatrixDot_Cuda(const float* src0, const float* src1, float* dst, const int d0, const int d1, const int d2)
     {
-        const int row = blockIdx.y * blockDim.y + threadIdx.y;
-        const int col = blockIdx.x * blockDim.x + threadIdx.x;
+        int thread_row = threadIdx.y;
+        int thread_col = threadIdx.x;
+        int row = blockIdx.y * blockDim.y + thread_row;
+        int col = blockIdx.x * blockDim.x + thread_col;
+
+        // if (row >= d0 || col >= d2)
+        //     return; // Out of bounds check
+
+        __shared__ float shared_src0[TILE_SIZE][TILE_SIZE];
+        __shared__ float shared_src1[TILE_SIZE][TILE_SIZE];
+
         float sum = 0.0f;
 
-
-        if (row >= d0 || col >= d2)
-            return; // Out of bounds check
-
-        for (int i = 0; i < d1; i++)
+        // Loop over tiles
+        int num_tiles = (d1 + TILE_SIZE - 1) / TILE_SIZE;
+        for (int t = 0; t < num_tiles; ++t)
         {
+            int tiled_col = t * TILE_SIZE + thread_col;
+            int tiled_row = t * TILE_SIZE + thread_row;
 
-            sum += src0[row * d1 + i] * src1[i * d2 + col];
+            // Load tile from src0
+            if (row < d0 && tiled_col < d1)
+                shared_src0[thread_row][thread_col] = src0[row * d1 + tiled_col];
+            else
+                shared_src0[thread_row][thread_col] = 0.0f;
+
+            // Load tile from src1
+            if (tiled_row < d1 && col < d2)
+                shared_src1[thread_row][thread_col] = src1[tiled_row * d2 + col];
+            else
+                shared_src1[thread_row][thread_col] = 0.0f;
+
+            __syncthreads();
+
+            // Compute partial sum for this tile
+            for (int k = 0; k < TILE_SIZE; ++k)
+                sum += shared_src0[thread_row][k] * shared_src1[k][thread_col];
+
+            __syncthreads();
         }
 
-        dst[row * d2 + col] = sum;
+        // Write result
+        if (row < d0 && col < d2)
+            dst[row * d2 + col] = sum;
     }
 
     void qlm::Matrix::Dot(const Matrix &src, Matrix &dst) const
     {
-        dim3 block_size(16, 16);
+        dim3 block_size(TILE_SIZE, TILE_SIZE);
         dim3 num_blocks((src.columns + block_size.x - 1) / block_size.x, (rows + block_size.y - 1) / block_size.y);
 
         // Launch kernel
