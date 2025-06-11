@@ -5,13 +5,10 @@ namespace qlm
 {
     __global__ void MatrixDot_Cuda(const float* src0, const float* src1, float* dst, const int d0, const int d1, const int d2)
     {
-        int thread_row = threadIdx.y;
-        int thread_col = threadIdx.x;
-        int row = blockIdx.y * blockDim.y + thread_row;
-        int col = blockIdx.x * blockDim.x + thread_col;
-
-        // if (row >= d0 || col >= d2)
-        //     return; // Out of bounds check
+        const int thread_row = threadIdx.y;
+        const int thread_col = threadIdx.x;
+        const int row = blockIdx.y * blockDim.y + thread_row;
+        const int col = blockIdx.x * blockDim.x + thread_col;
 
         __shared__ float shared_src0[TILE_SIZE][TILE_SIZE];
         __shared__ float shared_src1[TILE_SIZE][TILE_SIZE];
@@ -22,20 +19,19 @@ namespace qlm
         int num_tiles = (d1 + TILE_SIZE - 1) / TILE_SIZE;
         for (int t = 0; t < num_tiles; ++t)
         {
+            shared_src0[thread_row][thread_col] = 0.0f;
+            shared_src1[thread_row][thread_col] = 0.0f;
+
             int tiled_col = t * TILE_SIZE + thread_col;
             int tiled_row = t * TILE_SIZE + thread_row;
 
             // Load tile from src0
             if (row < d0 && tiled_col < d1)
                 shared_src0[thread_row][thread_col] = src0[row * d1 + tiled_col];
-            else
-                shared_src0[thread_row][thread_col] = 0.0f;
 
             // Load tile from src1
             if (tiled_row < d1 && col < d2)
                 shared_src1[thread_row][thread_col] = src1[tiled_row * d2 + col];
-            else
-                shared_src1[thread_row][thread_col] = 0.0f;
 
             __syncthreads();
 

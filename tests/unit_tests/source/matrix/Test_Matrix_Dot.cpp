@@ -73,9 +73,9 @@ TEST_P(MatrixDot, Test_MatrixDot)
 INSTANTIATE_TEST_CASE_P(
     Test_MatrixDot, MatrixDot,
     ::testing::Combine(
-        ::testing::Values(7, 100, 500, 2000),
-        ::testing::Values(7, 100, 500, 2000),
-        ::testing::Values(7, 100, 500, 2000),
+        ::testing::Values(7, 100, 512, 2000),
+        ::testing::Values(7, 100, 512, 2000),
+        ::testing::Values(7, 100, 512, 2000),
         ::testing::Values(0.0f),
         ::testing::Values(100.0f)
     ));
