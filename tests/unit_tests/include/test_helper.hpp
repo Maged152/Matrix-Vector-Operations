@@ -125,31 +125,53 @@ namespace test
 		return true;
 	}
 
-	inline bool TestCompare_Percentage(const qlm::Vector& vec1, const qlm::Vector& vec2, const float threshold)
+	inline bool TestCompare_SNR(const test::Vector& ref, const qlm::Vector& test, float snr_threshold_db)
 	{
-		for (int i = 0; i < vec1.Length(); i++)
+		test::Vector test_cpu{ test.Length() };
+		test.ToCPU(test_cpu.data, test_cpu.Length());
+
+		double signal_energy = 0.0;
+		double noise_energy = 0.0;
+
+		for (int i = 0; i < ref.Length(); ++i)
 		{
-			if (!TestCompare_Percentage(vec1.Get(i), vec2.Get(i), threshold))
-			{
-				return false;
-			}
+			float ref_val = ref.Get(i);
+			float test_val = test_cpu.Get(i);
+
+			signal_energy += ref_val * ref_val;
+
+			float noise = ref_val - test_val;
+			noise_energy += noise * noise;
 		}
 
-		return true;
+		// Avoid division by zero
+		if (noise_energy == 0.0)
+		{
+			test::PrintParameter(std::numeric_limits<double>::infinity(), "SNR (dB)");
+			return true; // Perfect match
+		}
+
+		double snr_db = 10.0 * std::log10(signal_energy / noise_energy);
+		test::PrintParameter(snr_db, "SNR (dB)");
+
+		return snr_db >= snr_threshold_db;
 	}
 
-	inline bool TestCompare_Percentage(const float& src1, const float& src2, const float threshold)
+	// SNR compare for scalars
+	inline bool TestCompare_SNR(float ref, float test, float snr_threshold_db)
 	{
-		const float percentage = (std::abs(src1 - src2) / (std::abs(src1 + src2) / 2.0f)) * 100.0f;
-		
-		if (percentage > threshold)
-		{
-			std::cout << "percentage = " << percentage 
-				      << " ,threshold = " << threshold << "\n";
+		double signal_energy = ref * ref;
+		double noise_energy = (ref - test) * (ref - test);
 
-			return false;
+		if (noise_energy == 0.0)
+		{
+			test::PrintParameter(std::numeric_limits<double>::infinity(), "SNR (dB)");
+			return true; // Perfect match
 		}
 
-		return true;
+		double snr_db = 10.0 * std::log10(signal_energy / noise_energy);
+		test::PrintParameter(snr_db, "SNR (dB)");
+
+		return snr_db >= snr_threshold_db;
 	}
 }

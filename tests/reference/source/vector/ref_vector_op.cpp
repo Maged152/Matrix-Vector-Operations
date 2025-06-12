@@ -13,6 +13,15 @@ namespace test
 		}
 	}
 	///////////////////////////////////////////////////////////////////////////
+	void Vector::Sum(float& dst) const
+	{
+		dst = 0;
+		for (int l = 0; l < this->Length(); l++)
+		{
+			dst += this->Get(l);
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////
 	// void Angle(const test::Vector& src1, const test::Vector& src2, float& angle)
 	// {
 	// 	// mag for src1
