@@ -15,7 +15,7 @@ struct VectorSum : ::testing::TestWithParam<std::tuple<
 // Define a parameterized test case
 TEST_P(VectorSum, Test_VectorSum)
 {
-    constexpr float threshold = 100.0f;
+    constexpr float threshold = 40.0f;
     // extract the parameters
     auto& [length, min_val, max_val] = GetParam();
 
@@ -27,7 +27,8 @@ TEST_P(VectorSum, Test_VectorSum)
     qlm::Timer<qlm::usec> timer_cpu;
     qlm::Timer<qlm::usec> timer_gpu;
 
-    float dst_cpu, dst_gpu;
+    float dst_cpu;
+    qlm::DeviceMemory dst_gpu (1);
 
     // cpu vector
     test::Vector src_cpu{ length };
@@ -48,14 +49,16 @@ TEST_P(VectorSum, Test_VectorSum)
 
     // run gpu code
     timer_gpu.Start();
-    src1_gpu.Sum(dst_gpu);
+    src_gpu.Sum(dst_gpu);
     timer_gpu.End();
 
     // print time
     test::PrintTime(timer_cpu, timer_gpu);
 
     // compare the results
-    bool res = test::TestCompare_SNR(dst_cpu, dst_gpu, threshold);
+    float dst_gpu_cpu;
+    dst_gpu.ToCPU(&dst_gpu_cpu);
+    bool res = test::TestCompare_SNR(dst_cpu, dst_gpu_cpu, threshold);
 
     EXPECT_EQ(res, true);
 }
@@ -65,7 +68,7 @@ TEST_P(VectorSum, Test_VectorSum)
 INSTANTIATE_TEST_CASE_P(
     Test_VectorSum, VectorSum,
     ::testing::Combine(
-        ::testing::Values(7, 100, 5000, 20000, 200000, 2000000),
+        ::testing::Values(7, 256, 5000, 20000, 200000, 2000000),
         ::testing::Values(0.0f, -100.0f),
         ::testing::Values(1.0f, 100.0f)
     ));

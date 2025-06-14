@@ -33,7 +33,7 @@ namespace qlm
             void Mag(float& dst) const;
             void Unit(Vector& dst) const;
             void Angle(const Vector& src, float& dst) const;
-            void Sum(float& dst) const;
+            void Sum(DeviceMemory& result) const;
             void Mean(float& dst) const;
             void Var(float& dst) const;
             void Min(float& dst) const;
