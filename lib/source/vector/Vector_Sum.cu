@@ -8,19 +8,20 @@ namespace qlm
     __global__ void VectorSum_Cuda(const float* in, const int length, float* result)
     {
         const int tid = threadIdx.x;
-        const int gid = blockIdx.x * blockDim.x + tid;
+        const int gid = blockIdx.x * (blockDim.x * 2) + tid;
 
         __shared__ float partial_sum[BLOCK_SIZE];
-        partial_sum[tid] = (gid < length) ? in[gid] : 0.0f;
 
-	    __syncthreads();
+        // Load elements & do first add of reduction
+        const float second_element = (gid + blockDim.x < length) ? in[gid + blockDim.x] : 0.0f;
+        partial_sum[threadIdx.x] = in[gid] + second_element;
+        __syncthreads();
 
-        for (int s = 1; s < blockDim.x; s *= 2) 
-        {    
-            const int index = 2 * s * tid;
-            if (index < blockDim.x)
+        for (int s = blockDim.x / 2; s > 0; s >>= 1) 
+        { 
+            if (tid < s)
             {
-                partial_sum[index] += partial_sum[index + s];
+                partial_sum[tid] += partial_sum[tid + s];
             }
             __syncthreads();
         }
@@ -40,12 +41,11 @@ namespace qlm
 
 	    __syncthreads();
 
-        for (int s = 1; s < blockDim.x; s *= 2) 
-        {    
-            const int index = 2 * s * tid;
-            if (index < blockDim.x)
+        for (int s = blockDim.x / 2; s > 0; s >>= 1) 
+        {
+            if (tid < s)
             {
-                partial_sum[index] += partial_sum[index + s];
+                partial_sum[tid] += partial_sum[tid + s];
             }
             __syncthreads();
         }
@@ -61,7 +61,7 @@ namespace qlm
 	{
         // Launch kernel
         const int block_size = BLOCK_SIZE;
-        const int num_blocks = (length + block_size - 1) / block_size;
+        const int num_blocks = (length + (block_size * 2) - 1) / (block_size * 2);
 
         // allocate device memory for the result
         float* sum_result;
