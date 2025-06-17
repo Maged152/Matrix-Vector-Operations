@@ -47,12 +47,12 @@ TEST_P(VectorAdd, Test_VectorAdd)
 
     // run cpu code
     timer_cpu.Start();
-    src1_cpu.Add(src2_cpu, dst_cpu);
+    test::Add(src1_cpu, src2_cpu, dst_cpu);
     timer_cpu.End();
 
     // run gpu code
     timer_gpu.Start();
-    src1_gpu.Add(src2_gpu, dst_gpu);
+    qlm::Add(src1_gpu, src2_gpu, dst_gpu);
     timer_gpu.End();
 
     // print time

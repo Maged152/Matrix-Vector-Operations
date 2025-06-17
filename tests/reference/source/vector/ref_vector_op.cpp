@@ -4,21 +4,22 @@
 
 namespace test
 {
-	void Vector::Add(const Vector& src, Vector& dst) const
+	void test::Add(const Vector& src0, const Vector& src1, Vector& dst)
 	{
-		for (int l = 0; l < src.Length(); l++)
+		const int len =std::min(src0.Length(), src1.Length());
+		for (int l = 0; l < len; l++)
 		{
-			const float res = this->Get(l) + src.Get(l);
+			const float res = src0.Get(l) + src1.Get(l);
 			dst.Set(l, res);
 		}
 	}
 	///////////////////////////////////////////////////////////////////////////
-	void Vector::Sum(float& dst) const
+	void test::Sum(const Vector& src, float& dst)
 	{
 		dst = 0;
-		for (int l = 0; l < this->Length(); l++)
+		for (int l = 0; l < src.Length(); l++)
 		{
-			dst += this->Get(l);
+			dst += src.Get(l);
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////

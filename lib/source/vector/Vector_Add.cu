@@ -1,4 +1,4 @@
-#include "vector.hpp"
+#include "matrix_vector_op.hpp"
 
 namespace qlm
 {
@@ -11,12 +11,13 @@ namespace qlm
         }
     }
 
-    void qlm::Vector::Add(const Vector &src, Vector &dst) const
+    void qlm::Add(const Vector &src0, const Vector &src1, Vector &dst)
 	{
+        const int length = std::min(src0.Length(), src1.Length());
         // Launch kernel
         const int block_size = 256;
         const int num_blocks = (length + block_size - 1) / block_size;
-        VectorAdd_Cuda<<<num_blocks, block_size>>>(data, src.data, dst.data, length);
+        VectorAdd_Cuda<<<num_blocks, block_size>>>(src0.data, src1.data, dst.data, length);
         cudaDeviceSynchronize(); // Ensure the kernel execution is complete
 	}
 }

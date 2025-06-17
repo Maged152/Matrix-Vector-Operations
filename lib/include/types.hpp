@@ -2,14 +2,6 @@
 
 namespace qlm
 {
-	enum class Status
-	{
-		SUCCESS,
-		FAIL,
-		INVALID_DIMENSIONS,
-		INVALID_UTILIZATION,
-	};
-
 	enum class BroadCast
 	{
 		BROAD_CAST_ROW,
@@ -23,15 +15,20 @@ namespace qlm
 		INF_NORM
 	};
 
-	struct DeviceMemory
+	struct DeviceBuffer
     {
         float* data;
         size_t size = 0;
 
-        DeviceMemory(size_t size);
-        ~DeviceMemory();
+        DeviceBuffer(size_t size);
+        ~DeviceBuffer();
 
         void ToCPU(float* host_data) const;
         void FromCPU(const float* host_data);
+    };
+
+	struct DeviceFloat
+    {
+		DeviceBuffer mem {1};
     };
 }

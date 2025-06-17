@@ -28,7 +28,7 @@ TEST_P(VectorSum, Test_VectorSum)
     qlm::Timer<qlm::usec> timer_gpu;
 
     float dst_cpu;
-    qlm::DeviceMemory dst_gpu (1);
+    qlm::DeviceFloat dst_gpu;
 
     // cpu vector
     test::Vector src_cpu{ length };
@@ -44,12 +44,12 @@ TEST_P(VectorSum, Test_VectorSum)
 
     // run cpu code
     timer_cpu.Start();
-    src_cpu.Sum(dst_cpu);
+    test::Sum(src_cpu, dst_cpu);
     timer_cpu.End();
 
     // run gpu code
     timer_gpu.Start();
-    src_gpu.Sum(dst_gpu);
+    qlm::Sum(src_gpu, dst_gpu);
     timer_gpu.End();
 
     // print time
@@ -57,7 +57,7 @@ TEST_P(VectorSum, Test_VectorSum)
 
     // compare the results
     float dst_gpu_cpu;
-    dst_gpu.ToCPU(&dst_gpu_cpu);
+    dst_gpu.mem.ToCPU(&dst_gpu_cpu);
     bool res = test::TestCompare_SNR(dst_cpu, dst_gpu_cpu, threshold);
 
     EXPECT_EQ(res, true);

@@ -1,5 +1,4 @@
-#include "vector.hpp"
-#include <algorithm>
+#include "matrix_vector_op.hpp"
 
 #define BLOCK_SIZE 256
 
@@ -57,8 +56,9 @@ namespace qlm
     }
 
 
-    void qlm::Vector::Sum(DeviceMemory& result) const
+    void qlm::Sum(const Vector &src, DeviceFloat& result)
 	{
+        const int length = src.Length();
         // Launch kernel
         const int block_size = BLOCK_SIZE;
         const int num_blocks = (length + (block_size * 2) - 1) / (block_size * 2);
@@ -68,14 +68,14 @@ namespace qlm
         cudaMalloc(&sum_result, num_blocks * sizeof(float));
         
         // First reduction: input -> partial sums
-        VectorSum_Cuda<<<num_blocks, block_size>>>(data, length, sum_result);
+        VectorSum_Cuda<<<num_blocks, block_size>>>(src.data, length, sum_result);
         cudaDeviceSynchronize();
 
         // Second reduction: partial sums -> final sum
         for (int i = 0; i < num_blocks; i += block_size) 
         {
             const int cur_length = std::min(block_size, num_blocks - i);
-            VectorSumBlock_Cuda<<<1, block_size>>>(&sum_result[i], cur_length, result.data);
+            VectorSumBlock_Cuda<<<1, block_size>>>(&sum_result[i], cur_length, result.mem.data);
             cudaDeviceSynchronize();
         }
         

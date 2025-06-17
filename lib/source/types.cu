@@ -1,10 +1,10 @@
 #include "types.hpp"
 
-qlm::DeviceMemory::DeviceMemory(size_t size) : size(size)
+qlm::DeviceBuffer::DeviceBuffer(size_t size) : size(size)
 {
     cudaMalloc(&data, size * sizeof(float));
 }
-qlm::DeviceMemory::~DeviceMemory()
+qlm::DeviceBuffer::~DeviceBuffer()
 {
     if (data != nullptr) {
         cudaFree(data);
@@ -12,12 +12,12 @@ qlm::DeviceMemory::~DeviceMemory()
     }
 }
 
-void qlm::DeviceMemory::ToCPU(float *hostData) const
+void qlm::DeviceBuffer::ToCPU(float *hostData) const
 {
     cudaMemcpy(hostData, data, size * sizeof(float), cudaMemcpyDeviceToHost);
 }
 
-void qlm::DeviceMemory::FromCPU(const float *hostData)
+void qlm::DeviceBuffer::FromCPU(const float *hostData)
 {
     cudaMemcpy(data, hostData, size * sizeof(float), cudaMemcpyHostToDevice);
 }
