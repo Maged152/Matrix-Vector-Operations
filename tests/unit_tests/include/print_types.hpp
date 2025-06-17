@@ -2,19 +2,19 @@
 #include <ostream>
 #include "matrix_vector_op.hpp"
 
-inline std::ostream& operator << (std::ostream& out, const qlm::Norm& norm)
+inline std::ostream& operator << (std::ostream& out, const qlm::Norm_t norm)
 {
     switch (norm)
     {
-    case qlm::Norm::L1_NORM :
+    case qlm::Norm_t::L1_NORM :
         out << "L1_NORM";
         break;
 
-    case qlm::Norm::L2_NORM:
+    case qlm::Norm_t::L2_NORM:
         out << "L2_NORM";
         break;
 
-    case qlm::Norm::INF_NORM:
+    case qlm::Norm_t::INF_NORM:
         out << "INF_NORM";
         break;
     }
@@ -22,7 +22,7 @@ inline std::ostream& operator << (std::ostream& out, const qlm::Norm& norm)
     return out;
 }
 
-inline std::ostream& operator << (std::ostream& out, const qlm::BroadCast& bc)
+inline std::ostream& operator << (std::ostream& out, const qlm::BroadCast bc)
 {
     if (bc == qlm::BroadCast::BROAD_CAST_ROW)
     {

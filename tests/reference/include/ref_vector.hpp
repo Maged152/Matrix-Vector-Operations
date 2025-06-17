@@ -24,7 +24,7 @@ namespace test
         
         public:
             // print vector
-            void Print();
+            void Print() const;
             // random initialization
             void RandomInit(const float min_value, const float max_value);
     };
@@ -49,7 +49,7 @@ namespace test
     void Min(const Vector& src, float& dst);
     void Max(const Vector& src, float& dst);
     void MinMax(const Vector& src, float& dst_min, float& dst_max);
-    void Norm(const Vector& src, const Norm norm, float& dst);
+    void Norm(const Vector& src, const qlm::Norm_t norm, float& dst);
     void ArgMin(const Vector& src, Vector& dst);
     void ArgMax(const Vector& src, Vector& dst);
     void ArgMinMax(const Vector& src, Vector& dst_min,Vector& dst_max);

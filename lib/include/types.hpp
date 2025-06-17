@@ -8,7 +8,7 @@ namespace qlm
 		BROAD_CAST_COLUMN
 	};
 
-	enum class Norm
+	enum class Norm_t
 	{
 		L1_NORM,
 		L2_NORM,

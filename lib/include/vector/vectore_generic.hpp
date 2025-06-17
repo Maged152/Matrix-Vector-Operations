@@ -23,7 +23,7 @@ namespace qlm
     void Min(const Vector& src, DeviceFloat& dst);
     void Max(const Vector& src, DeviceFloat& dst);
     void MinMax(const Vector& src, DeviceFloat& dst_min, DeviceFloat& dst_max);
-    void Norm(const Vector& src, const Norm norm, DeviceFloat& dst);
+    void Norm(const Vector& src, const Norm_t norm, DeviceFloat& dst);
     void ArgMin(const Vector& src, Vector& dst);
     void ArgMax(const Vector& src, Vector& dst);
     void ArgMinMax(const Vector& src, Vector& dst_min,Vector& dst_max);
