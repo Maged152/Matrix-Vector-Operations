@@ -23,6 +23,12 @@ namespace test
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////
+	void test::Mean(const Vector& src, float& dst)
+	{
+		Sum(src, dst);
+		dst /= src.Length();
+	}
+	// ///////////////////////////////////////////////////////////////////////////
 	// void Angle(const test::Vector& src1, const test::Vector& src2, float& angle)
 	// {
 	// 	// mag for src1
@@ -133,12 +139,6 @@ namespace test
 	// 	{
 	// 		dst = std::max(dst, src.Get(i));
 	// 	}
-	// }
-	// ///////////////////////////////////////////////////////////////////////////
-	// void Mean(const test::Vector& src, float& dst)
-	// {
-	// 	Sum(src, dst);
-	// 	dst /= src.Length();
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
 	// void Min(const test::Vector& src, float& dst)
