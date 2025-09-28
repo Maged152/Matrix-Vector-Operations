@@ -60,4 +60,7 @@ namespace test
     void Sub(const Vector& in, const float& val, Vector& dst);
     void Mul(const Vector& in, const float& val, Vector& dst);
     void Div(const Vector& in, const float& val, Vector& dst);
+
+    // vector dsp operations
+    void Conv(const Vector& input, const Vector& kernel, Vector& output, const qlm::ConvMode mode);
 }

@@ -15,6 +15,13 @@ namespace qlm
 		INF_NORM
 	};
 
+	enum class ConvMode
+	{
+		VALID,
+		SAME,
+		FULL
+	};
+
 	struct DeviceBuffer
     {
         float* data;
