@@ -13,7 +13,7 @@ struct VectorConv : ::testing::TestWithParam<std::tuple<
 
 TEST_P(VectorConv, Test_VectorConv)
 {
-    constexpr float threshold = 1e-4f;
+    constexpr float snr_threshold_db = 100.0f;
     auto& [input_length, kernel_length, min_val, max_val, mode] = GetParam();
 
     test::PrintParameter(input_length, "input_length");
@@ -54,8 +54,8 @@ TEST_P(VectorConv, Test_VectorConv)
     // Run GPU code
     qlm::Conv(input_gpu, kernel_gpu, output_gpu, mode);
 
-    // Compare results
-    bool res = test::TestCompare(output_cpu, output_gpu, threshold);
+    // Compare results using SNR
+    bool res = test::TestCompare_SNR(output_cpu, output_gpu, snr_threshold_db);
     EXPECT_EQ(res, true);
 }
 
