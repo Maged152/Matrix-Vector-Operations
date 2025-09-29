@@ -24,12 +24,12 @@ namespace test
             return;
         }
 
-        if (out_len != output.Length()) {
-            return
+        if (output_len != output.Length()) {
+            return;
         }
 
 
-        for (int i = 0; i < output_len; i+) 
+        for (int i = 0; i < output_len; i++) 
         {
             float sum = 0.0f;
             for (int j = 0; j < kernel_len; j++) 
