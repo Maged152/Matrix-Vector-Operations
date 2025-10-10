@@ -35,3 +35,21 @@ inline std::ostream& operator << (std::ostream& out, const qlm::BroadCast bc)
 
     return out;
 }
+
+inline std::ostream& operator << (std::ostream& out, const qlm::ConvMode mode)
+{
+    if (mode == qlm::ConvMode::FULL)
+    {
+        out << "FULL";
+    }
+    else if (mode == qlm::ConvMode::SAME)
+    {
+        out << "SAME";
+    }
+    else // mode == qlm::ConvMode::VALID
+    {
+        out << "VALID";
+    }
+
+    return out;
+}

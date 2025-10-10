@@ -20,7 +20,7 @@ TEST_P(VectorConv, Test_VectorConv)
     test::PrintParameter(kernel_length, "kernel_length");
     test::PrintParameter(min_val, "min_val");
     test::PrintParameter(max_val, "max_val");
-    test::PrintParameter(static_cast<int>(mode), "conv_mode");
+    test::PrintParameter(mode, "conv_mode");
 
     // Determine output length
     int output_length = 0;
