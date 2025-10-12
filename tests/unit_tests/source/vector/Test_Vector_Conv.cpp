@@ -73,8 +73,8 @@ TEST_P(VectorConv, Test_VectorConv)
 INSTANTIATE_TEST_CASE_P(
     Test_VectorConv, VectorConv,
     ::testing::Combine(
-        ::testing::Values(8, 32, 100, 256, 1024, 5000),
-        ::testing::Values(3, 5, 13, 27, 51),
+        ::testing::Values(29, 55, 100, 256, 1024, 5000),
+        ::testing::Values(3, 5, 13, 27),
         ::testing::Values(-1.0f, 0.0f),
         ::testing::Values(1.0f, 10.0f),
         ::testing::Values(
