@@ -107,7 +107,8 @@ namespace qlm
 		
 		const int block_size = 256;
 		const int num_blocks = (output_length + block_size - 1) / block_size;
-		const int shared_mem_size = (block_size + kernel_length - 1) * sizeof(float);
+		const int extra_size = (mode == ConvMode::FULL) ? (kernel_length - 1) * 2 : (kernel_length - 1);
+		const int shared_mem_size = (block_size + extra_size) * sizeof(float);
 
 		// Launch kernel
 		if (mode == ConvMode::FULL)
