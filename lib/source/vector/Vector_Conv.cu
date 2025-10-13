@@ -9,33 +9,22 @@ namespace qlm
 		const int idx = blockIdx.x * blockDim.x + threadIdx.x;
 		if (idx >= output_length) return;
 
-		extern __shared__ float shared_mem[];
-
-		const int r = kernel_length >> 1;
-		const int d = r << 1;
-
-		const int lower_idx = idx - d;
-		shared_mem[threadIdx.x] = (lower_idx < 0) ? 0.0f : input[lower_idx];
-
-		const int upper_idx = threadIdx.x + d;
-		if (upper_idx >= blockDim.x)
-		{
-			shared_mem[upper_idx] = (idx < input_length) ? input[idx] : 0.0f;
-		}
-
-		__syncthreads();
-
 		float sum = 0.0f;
 
 		for (int k = 0; k < kernel_length; k++)
-		{ 
-			sum += shared_mem[threadIdx.x + k] * reinterpret_cast<const float*>(CudaConstMem_ptr)[kernel_length - 1 - k];
+		{
+			const int input_idx = idx + k - (kernel_length - 1);
+
+			if (input_idx >= 0 && input_idx < input_length)
+			{
+				sum += input[input_idx] * reinterpret_cast<const float*>(CudaConstMem_ptr)[kernel_length - 1 - k];
+			}
 		}
 
 		output[idx] = sum;
 	}
 
-	__global__ void VectorConvSame_Cuda(const float* input, const int input_length, const int kernel_length, float* output, const int output_length)
+	__global__ void VectorConvSame_CudaSM(const float* input, const int input_length, const int kernel_length, float* output, const int output_length)
 	{
 		const int idx = blockIdx.x * blockDim.x + threadIdx.x;
 		if (idx >= output_length) return;
@@ -67,6 +56,26 @@ namespace qlm
 		for (int k = 0; k < kernel_length; k++)
 		{	
 			sum += shared_mem[threadIdx.x + k] * reinterpret_cast<const float*>(CudaConstMem_ptr)[kernel_length - 1 - k];
+		}
+
+		output[idx] = sum;
+	}
+
+	__global__ void VectorConvSame_Cuda(const float* input, const int input_length, const int kernel_length, float* output, const int output_length)
+	{
+		const int idx = blockIdx.x * blockDim.x + threadIdx.x;
+		if (idx >= output_length) return;
+
+		float sum = 0.0f;
+
+		for (int k = 0; k < kernel_length; k++)
+		{
+			const int input_idx = idx + k - (kernel_length / 2);
+
+			if (input_idx >= 0 && input_idx < input_length)
+			{
+				sum += input[input_idx] * reinterpret_cast<const float*>(CudaConstMem_ptr)[kernel_length - 1 - k];
+			}
 		}
 
 		output[idx] = sum;
@@ -107,14 +116,20 @@ namespace qlm
 		
 		const int block_size = 256;
 		const int num_blocks = (output_length + block_size - 1) / block_size;
-		const int extra_size = (mode == ConvMode::FULL) ? (kernel_length - 1) * 2 : (kernel_length - 1);
+		const int extra_size = kernel_length - 1;
 		const int shared_mem_size = (block_size + extra_size) * sizeof(float);
+
+		bool use_shared_mem = output_length % block_size == 0 ; // only use shared memory when all threads in the last block are used
 
 		// Launch kernel
 		if (mode == ConvMode::FULL)
 			VectorConvFull_Cuda<<<num_blocks, block_size, shared_mem_size>>>(input.data, input_length, kernel_length, output.data, output_length);
-		else if (mode == ConvMode::SAME)
-			VectorConvSame_Cuda<<<num_blocks, block_size, shared_mem_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+		else if (mode == ConvMode::SAME) {
+			if (use_shared_mem)
+				VectorConvSame_CudaSM<<<num_blocks, block_size, shared_mem_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+			else
+				VectorConvSame_Cuda<<<num_blocks, block_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+		}
 		else // mode == ConvMode::VALID
 			VectorConvValid_Cuda<<<num_blocks, block_size>>>(input.data, input_length, kernel_length, output.data, output_length);
 
