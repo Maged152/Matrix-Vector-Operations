@@ -33,28 +33,30 @@ namespace test
             void RandomInit(const float min_value, const float max_value);
             void LinearInit();
 
-        public:
-            // matrix-matrix operations
-            void Add(const Matrix& src, Matrix& dst) const;
-            void Sub(const Matrix& src, Matrix& dst) const;
-            void Mul(const Matrix& src, Matrix& dst) const;
-            void Div(const Matrix& src, Matrix& dst) const;
-            void Dot(const Matrix& src, Matrix& dst) const;
-            void Transpose(Matrix& dst) const;
-
-        public:
-            // matrix-vector operations
-            void Add(const Vector& src, Matrix& dst, const qlm::BroadCast& broad_cast) const;
-            void Sub(const Vector& src, Matrix& dst, const qlm::BroadCast& broad_cast) const;
-            void Mul(const Vector& src, Matrix& dst, const qlm::BroadCast& broad_cast) const;
-            void Div(const Vector& src, Matrix& dst, const qlm::BroadCast& broad_cast) const;
-            void Dot(const Vector& src, Vector& dst) const;
-
-        public:
-            // matrix-scalar operations
-            void Add(const float src, Matrix& dst) const;
-            void Sub(const float src, Matrix& dst) const;
-            void Mul(const float src, Matrix& dst) const;
-            void Div(const float src, Matrix& dst) const;
     };
+
+
+    // matrix-matrix operations
+    void Add(const Matrix& src0, const Matrix& src1, Matrix& dst);
+    void Sub(const Matrix& src0, const Matrix& src1, Matrix& dst);
+    void Mul(const Matrix& src0, const Matrix& src1, Matrix& dst);
+    void Div(const Matrix& src0, const Matrix& src1, Matrix& dst);
+    void Dot(const Matrix& src0, const Matrix& src1, Matrix& dst);
+    void Transpose(const Matrix& src, Matrix& dst);
+
+    // matrix-vector operations
+    void Add(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    void Sub(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    void Mul(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    void Div(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    void Dot(const Matrix& src0, const Vector& src1, Vector& dst);
+
+    // matrix-scalar operations
+    void Add(const Matrix& src0, const float src, Matrix& dst);
+    void Sub(const Matrix& src0, const float src, Matrix& dst);
+    void Mul(const Matrix& src0, const float src, Matrix& dst);
+    void Div(const Matrix& src0, const float src, Matrix& dst);
+
+    // image processing operation
+    void Conv(const Matrix& src, const Matrix& kernel, Matrix& dst);
 }

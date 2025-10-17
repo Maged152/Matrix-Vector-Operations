@@ -1,4 +1,4 @@
-#include "matrix.hpp"
+#include "matrix_vector_op.hpp"
 #include <curand_kernel.h>
 
 

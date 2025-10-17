@@ -1,4 +1,4 @@
-#include "matrix.hpp"
+#include "matrix_vector_op.hpp"
 
 #define TILE_SIZE 16
 namespace qlm
@@ -47,13 +47,13 @@ namespace qlm
             dst[row * d2 + col] = sum;
     }
 
-    void qlm::Matrix::Dot(const Matrix &src, Matrix &dst) const
+    void Dot(const Matrix &src0, const Matrix &src1, Matrix &dst)
     {
         dim3 block_size(TILE_SIZE, TILE_SIZE);
-        dim3 num_blocks((src.columns + block_size.x - 1) / block_size.x, (rows + block_size.y - 1) / block_size.y);
+        dim3 num_blocks((src1.columns + block_size.x - 1) / block_size.x, (src0.rows + block_size.y - 1) / block_size.y);
 
         // Launch kernel
-        MatrixDot_Cuda<<<num_blocks, block_size>>>(data, src.data, dst.data, rows, columns, src.columns);
+        MatrixDot_Cuda<<<num_blocks, block_size>>>(src0.data, src1.data, dst.data, src0.rows, src0.columns, src1.columns);
         cudaDeviceSynchronize();
     }
 } // namespace qlm

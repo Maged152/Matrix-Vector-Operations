@@ -51,12 +51,12 @@ TEST_P(MatrixDot, Test_MatrixDot)
 
     // run cpu code
     timer_cpu.Start();
-    src1_cpu.Dot(src2_cpu, dst_cpu);
+    test::Dot(src1_cpu, src2_cpu, dst_cpu);
     timer_cpu.End();
 
     // run gpu code
     timer_gpu.Start();
-    src1_gpu.Dot(src2_gpu, dst_gpu);
+    qlm::Dot(src1_gpu, src2_gpu, dst_gpu);
     timer_gpu.End();
 
     // print time

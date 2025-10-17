@@ -1,7 +1,8 @@
 #pragma once
 
 #include <algorithm>
-#include "matrix.hpp"
+#include "matrix/matrix.hpp"
+#include "matrix/matrix_image_processing.hpp"
 #include "vector/vector_generic.hpp"
 #include "vector/vector_dsp.hpp"
 

@@ -22,6 +22,18 @@ namespace qlm
 		FULL
 	};
 
+	enum class BorderType
+	{
+		CONST,
+		REPLICATE
+	};
+
+	struct BorderMode
+	{
+		BorderType border_type = BorderType::CONST;
+		float border_pixel = 0.0f;
+	};
+
 	struct DeviceBuffer
     {
         float* data;
