@@ -58,5 +58,5 @@ namespace test
     void Div(const Matrix& src0, const float src, Matrix& dst);
 
     // image processing operation
-    void Conv(const Matrix& src, const Matrix& kernel, Matrix& dst);
+    void Conv(const Matrix& src, const Matrix& kernel, Matrix& dst, const qlm::BorderMode mode);
 }

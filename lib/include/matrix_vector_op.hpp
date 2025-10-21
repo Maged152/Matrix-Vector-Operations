@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include "matrix/matrix.hpp"
-#include "matrix/matrix_image_processing.hpp"
+#include "matrix/matrix_image.hpp"
 #include "vector/vector_generic.hpp"
 #include "vector/vector_dsp.hpp"
 

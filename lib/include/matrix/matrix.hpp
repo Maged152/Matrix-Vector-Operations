@@ -13,11 +13,11 @@ namespace qlm
             float* data = nullptr;
             int columns = 0;
             int rows = 0;
-            size_t stride = 0; 
+            int stride = 0; 
 
         public:
             Matrix();
-            Matrix(const int rows, const int columns);
+            Matrix(const int rows, const int columns, const int stride = -1);
             Matrix(const Matrix& other);
             ~Matrix();
 
@@ -27,9 +27,9 @@ namespace qlm
             int Columns() const;
             int Rows() const;
             int Stride() const;
-            void Alloc(const int rows, const int columns);
-            void FromCPU(const float* src, const int rows, const int columns);
-            void ToCPU(float* dst, const int rows, const int columns) const;
+            void Alloc(const int rows, const int columns, const int stride = -1);
+            void FromCPU(const float* src, const int rows, const int stride);
+            void ToCPU(float* dst, const int rows, const int stride) const;
 
     };
     
