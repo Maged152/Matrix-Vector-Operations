@@ -4,6 +4,6 @@
 
 namespace qlm
 {
-    void Conv(const Matrix& input, const Matrix& kernel, Matrix& output, const qlm::BorderMode mode);
+    void Conv(const Matrix& input, const Matrix& kernel, Matrix& output, const qlm::ConvMode mode);
     
 }
