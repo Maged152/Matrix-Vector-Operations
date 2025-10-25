@@ -174,4 +174,40 @@ namespace test
 
 		return snr_db >= snr_threshold_db;
 	}
+
+	// SNR compare for matrices
+	inline bool TestCompare_SNR(const test::Matrix& ref, const qlm::Matrix& test, float snr_threshold_db)
+	{
+		test::Matrix test_cpu{ test.Rows(), test.Columns() };
+		test.ToCPU(test_cpu.data, test_cpu.Rows(), test_cpu.Columns());
+
+		double signal_energy = 0.0;
+		double noise_energy = 0.0;
+
+		for (int r = 0; r < ref.Rows(); ++r)
+		{
+			for (int c = 0; c < ref.Columns(); ++c)
+			{
+				float ref_val = ref.Get(r, c);
+				float test_val = test_cpu.Get(r, c);
+
+				signal_energy += static_cast<double>(ref_val) * static_cast<double>(ref_val);
+
+				double noise = static_cast<double>(ref_val) - static_cast<double>(test_val);
+				noise_energy += noise * noise;
+			}
+		}
+
+		// Avoid division by zero
+		if (noise_energy == 0.0)
+		{
+			test::PrintParameter(std::numeric_limits<double>::infinity(), "SNR (dB)");
+			return true; // Perfect match
+		}
+
+		double snr_db = 10.0 * std::log10(signal_energy / noise_energy);
+		test::PrintParameter(snr_db, "SNR (dB)");
+
+		return snr_db >= snr_threshold_db;
+	}
 }

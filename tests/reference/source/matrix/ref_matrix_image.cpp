@@ -4,7 +4,7 @@
 
 namespace test
 {
-    void Conv(const Matrix& src, const Matrix& kernel, Matrix& dst, const qlm::ConvMode conv_mode, const qlm::ConvMode mode)
+    void Conv(const Matrix& src, const Matrix& kernel, Matrix& dst, const qlm::ConvMode mode)
     {
         const int ker_rows = kernel.rows;
         const int ker_cols = kernel.columns;
