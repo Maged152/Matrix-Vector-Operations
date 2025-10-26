@@ -123,7 +123,7 @@ namespace qlm
 
 		// Launch kernel
 		if (mode == ConvMode::FULL)
-			VectorConvFull_Cuda<<<num_blocks, block_size, shared_mem_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+			VectorConvFull_Cuda<<<num_blocks, block_size>>>(input.data, input_length, kernel_length, output.data, output_length);
 		else if (mode == ConvMode::SAME) {
 			if (use_shared_mem)
 				VectorConvSame_CudaSM<<<num_blocks, block_size, shared_mem_size>>>(input.data, input_length, kernel_length, output.data, output_length);

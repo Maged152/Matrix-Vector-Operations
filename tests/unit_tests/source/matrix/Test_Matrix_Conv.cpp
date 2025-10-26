@@ -80,10 +80,10 @@ TEST_P(MatrixConv, Test_MatrixConv)
 INSTANTIATE_TEST_CASE_P(
     Test_MatrixConv, MatrixConv,
     ::testing::Combine(
-        ::testing::Values(16, 32, 64),
-        ::testing::Values(16, 32, 48),
-        ::testing::Values(3, 5),
-        ::testing::Values(3, 5),
+        ::testing::Values(16, 33, 100, 1080),
+        ::testing::Values(16, 45, 480, 1920),
+        ::testing::Values(3, 7),
+        ::testing::Values(3, 7),
         ::testing::Values(-1.0f),
         ::testing::Values(1.0f),
         ::testing::Values(

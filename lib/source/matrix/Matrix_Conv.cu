@@ -75,16 +75,13 @@ namespace qlm
         const int c = blockIdx.x * blockDim.x + threadIdx.x;
         if (r >= dst_rows || c >= dst_cols) return;
 
-        const int r_offset = ker_rows / 2;
-        const int c_offset = ker_cols / 2;
-
         float sum = 0.0f;
         for (int kr = 0; kr < ker_rows; ++kr)
         {
-            const int src_r = r + kr - r_offset;
+            const int src_r = r + kr;
             for (int kc = 0; kc < ker_cols; ++kc)
             {
-                const int src_c = c + kc - c_offset;
+                const int src_c = c + kc;
                 const float pixel = src[src_r * src_stride + src_c];
                 const float kval = reinterpret_cast<const float*>(CudaConstMem_ptr)[kr * ker_cols + kc];
                 sum += pixel * kval;

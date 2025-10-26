@@ -62,7 +62,7 @@ namespace test
                 {
                     for (int c = 0; c < ker_cols; ++c)
                     {
-                        const int ii = i + c + start_y;
+                        const int ii = i + r + start_y;
                         const int jj = j + c + start_x;
 
                         float pixel = 0.0f;
