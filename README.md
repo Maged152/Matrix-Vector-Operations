@@ -14,18 +14,64 @@ All computations are performed on the GPU, leveraging CUDA for maximum performan
 
 ---
 
-## How to Use
+## Build & Targets
 
-1. **Clone the repository.**
-2. **Build with CMake:**  
-   ```
-   cmake -S <source_dir> -B <build_dir>
-   cmake --build <build_dir>
-   ```
-3. **Install:**  
-   ```
-   cmake --install <build_dir> --prefix <install_dir>
-   ```
+### Configure 
+    $ cmake -S <source_dir> -B <build_dir>
+
+You can use `presets`
+
+    $ cmake -S <source_dir> --preset <preset_name>
+
+To know the existing presets
+
+    $ cmake -S <source_dir> --list-presets
+
+### Build
+    $ cmake --build <build_dir>
+
+## Run Tests
+
+Tests are registered with CTest via `gtest_discover_tests()`. The command to run them depends on the CMake generator you configured with.
+
+### For all generators (recommended)
+
+Using `ctest` directly works regardless of the generator:
+
+    $ ctest --test-dir <build_dir> -C <config>
+
+Where `<config>` is `Release` or `Debug` (with Visual Studio multi-config generators). Example using the preset build directory:
+
+    $ ctest --test-dir <build_dir> -C Release
+
+### For single-config generators (Makefiles, Ninja)
+
+If you configured with a single-config generator, the `test` build target is available:
+
+    $ cmake --build <build_dir> --target test
+
+### List available tests
+
+    $ ctest --test-dir <build_dir> -C Release -N
+
+### Run all tests in one executable (e.g. all Test_Vector_Add tests)
+
+    $ ctest --test-dir <build_dir> -C Release -R Test_Vector_Add
+
+### Run a specific test case (regex match on test name)
+
+For a single registered test case (e.g. `Test_Vector_Add.AddFloats`), use the `-R` regex filter:
+
+    $ ctest --test-dir <build_dir> -C Release -R "Test_Vector_Add.AddFloats"
+
+> Note: `gtest_discover_tests()` makes each individual `TEST()`/`TEST_F()` case a separate CTest entry (named `ExeName.TestCaseName`), so `-R` matches against those when using `ctest`.
+
+### Run tests with verbose output
+
+    $ ctest --test-dir <build_dir> -C Release -V
+
+## Install
+    $ cmake --install <build_dir> --prefix <install_dir>
 
 ---
 
