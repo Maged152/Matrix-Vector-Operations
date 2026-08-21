@@ -1,66 +1,44 @@
 #pragma once
 
 #include <limits>
-#include "types.hpp"
+#include "vector/vector.hpp"
+
 namespace test
 {
-    class Vector 
-    {
-        public:
-            float* data = nullptr;
-            int length = 0;
-
-        public:
-            Vector();
-            Vector(int length);
-            Vector(const Vector& other);
-            ~Vector();
-
-        public:
-            void Set(const int i, const float value);
-            float Get(const int i) const;
-            int Length() const;
-            void Alloc(const int len);
-        
-        public:
-            // print vector
-            void Print() const;
-            // random initialization
-            void RandomInit(const float min_value, const float max_value);
-    };
-
+    // CPU reference vector type alias
+    using VectorCPU = qlm::Vector<qlm::MemType::MEM_CPU>;
 
     // vector-vector operations
-    void Add(const Vector& src0, const Vector& src1, Vector& dst);
-    void Sub(const Vector& src0, const Vector& src1, Vector& dst);
-    void Mul(const Vector& src0, const Vector& src1, Vector& dst);
-    void Div(const Vector& src0, const Vector& src1, Vector& dst);
-    void Cov(const Vector& src0, const Vector& src1, float& dst);
-    void Corr(const Vector& src0, const Vector& src1, float& dst);
-    void Dot(const Vector& src0, const Vector& src1, float& dst);
-    void Angle(const Vector& src0, const Vector& src1, float& dst);
+    void Add(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
+    void Sub(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
+    void Mul(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
+    void Div(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
+    void Cov(const VectorCPU& src0, const VectorCPU& src1, float& dst);
+    void Corr(const VectorCPU& src0, const VectorCPU& src1, float& dst);
+    void Dot(const VectorCPU& src0, const VectorCPU& src1, float& dst);
+    void Angle(const VectorCPU& src0, const VectorCPU& src1, float& dst);
 
     // vector operations
-    void Mag(const Vector& src, float& dst);
-    void Unit(const Vector& src, Vector& dst);
-    void Sum(const Vector& src, float& result);
-    void Mean(const Vector& src, float& dst);
-    void Var(const Vector& src, float& dst);
-    void Min(const Vector& src, float& dst);
-    void Max(const Vector& src, float& dst);
-    void MinMax(const Vector& src, float& dst_min, float& dst_max);
-    void Norm(const Vector& src, const qlm::Norm_t norm, float& dst);
-    void ArgMin(const Vector& src, Vector& dst);
-    void ArgMax(const Vector& src, Vector& dst);
-    void ArgMinMax(const Vector& src, Vector& dst_min,Vector& dst_max);
-    void WeightedSum(const Vector& src, const Vector& weights, const float bias, float& dst);
+    void Mag(const VectorCPU& src, float& dst);
+    void Unit(const VectorCPU& src, VectorCPU& dst);
+    void Sum(const VectorCPU& src, float& result);
+    void Mean(const VectorCPU& src, float& dst);
+    void Var(const VectorCPU& src, float& dst);
+    void Min(const VectorCPU& src, float& dst);
+    void Max(const VectorCPU& src, float& dst);
+    void MinMax(const VectorCPU& src, float& dst_min, float& dst_max);
+    void Norm(const VectorCPU& src, const qlm::Norm_t norm, float& dst);
+    void ArgMin(const VectorCPU& src, VectorCPU& dst);
+    void ArgMax(const VectorCPU& src, VectorCPU& dst);
+    void ArgMinMax(const VectorCPU& src, VectorCPU& dst_min,VectorCPU& dst_max);
+    void WeightedSum(const VectorCPU& src, const VectorCPU& weights, const float bias, float& dst);
                
     // Vector-scalar operations
-    void Add(const Vector& in, const float& val, Vector& dst);
-    void Sub(const Vector& in, const float& val, Vector& dst);
-    void Mul(const Vector& in, const float& val, Vector& dst);
-    void Div(const Vector& in, const float& val, Vector& dst);
+    void Add(const VectorCPU& in, const float& val, VectorCPU& dst);
+    void Sub(const VectorCPU& in, const float& val, VectorCPU& dst);
+    void Mul(const VectorCPU& in, const float& val, VectorCPU& dst);
+    void Div(const VectorCPU& in, const float& val, VectorCPU& dst);
 
     // vector dsp operations
-    void Conv(const Vector& input, const Vector& kernel, Vector& output, const qlm::ConvMode mode);
+    void Conv(const VectorCPU& input, const VectorCPU& kernel, VectorCPU& output, const qlm::ConvMode mode);
 }

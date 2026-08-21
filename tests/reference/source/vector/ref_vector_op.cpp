@@ -4,7 +4,7 @@
 
 namespace test
 {
-	void test::Add(const Vector& src0, const Vector& src1, Vector& dst)
+	void test::Add(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst)
 	{
 		const int len =std::min(src0.Length(), src1.Length());
 		for (int l = 0; l < len; l++)
@@ -14,7 +14,7 @@ namespace test
 		}
 	}
 	///////////////////////////////////////////////////////////////////////////
-	void test::Sum(const Vector& src, float& dst)
+	void test::Sum(const VectorCPU& src, float& dst)
 	{
 		dst = 0;
 		for (int l = 0; l < src.Length(); l++)
@@ -23,13 +23,13 @@ namespace test
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////
-	void test::Mean(const Vector& src, float& dst)
+	void test::Mean(const VectorCPU& src, float& dst)
 	{
 		Sum(src, dst);
 		dst /= src.Length();
 	}
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Angle(const test::Vector& src1, const test::Vector& src2, float& angle)
+	// void Angle(const VectorCPU& src1, const VectorCPU& src2, float& angle)
 	// {
 	// 	// mag for src1
 	// 	float mag1 = 0;
@@ -44,7 +44,7 @@ namespace test
 	// 	angle = std::acos(dot / (mag1 * mag2)) * 180.0f / std::numbers::pi;
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void ArgMax(const test::Vector& src, size_t& dst)
+	// void ArgMax(const VectorCPU& src, size_t& dst)
 	// {
 	// 	float max_val = src.Get(0);
 	// 	dst = 0;
@@ -59,7 +59,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void ArgMin(const test::Vector& src, size_t& dst)
+	// void ArgMin(const VectorCPU& src, size_t& dst)
 	// {
 	// 	float min_val = src.Get(0);
 	// 	dst = 0;
@@ -74,13 +74,13 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void ArgMinMax(const test::Vector& src, size_t& min, size_t& max)
+	// void ArgMinMax(const VectorCPU& src, size_t& min, size_t& max)
 	// {
 	// 	ArgMin(src, min);
 	// 	ArgMax(src, max);
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Corr(const test::Vector& src1, const test::Vector& src2, float& dst)
+	// void Corr(const VectorCPU& src1, const VectorCPU& src2, float& dst)
 	// {
 	// 	float cov, var1, var2;
 
@@ -91,7 +91,7 @@ namespace test
 	// 	dst = cov / std::sqrt(var1 * var2);
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Cov(const test::Vector& src1, const test::Vector& src2, float& dst)
+	// void Cov(const VectorCPU& src1, const VectorCPU& src2, float& dst)
 	// {
 	// 	float mean1, mean2;
 	// 	Mean(src1, mean1);
@@ -106,7 +106,7 @@ namespace test
 	// 	dst = dst / (src1.Length() - 1);
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Div(const test::Vector& src1, const test::Vector& src2, test::Vector& dst)
+	// void Div(const VectorCPU& src1, const VectorCPU& src2, VectorCPU& dst)
 	// {
 	// 	for (int l = 0; l < src1.Length(); l++)
 	// 	{
@@ -115,7 +115,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Dot(const test::Vector& src1, const test::Vector& src2, float& dst)
+	// void Dot(const VectorCPU& src1, const VectorCPU& src2, float& dst)
 	// {
 	// 	dst = 0;
 	// 	for (int l = 0; l < src1.Length(); l++)
@@ -124,14 +124,14 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Mag(const test::Vector& src, float& dst)
+	// void Mag(const VectorCPU& src, float& dst)
 	// {
 	// 	dst = 0;
 	// 	Dot(src, src, dst);
 	// 	dst = std::sqrt(dst);
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Max(const test::Vector& src, float& dst)
+	// void Max(const VectorCPU& src, float& dst)
 	// {
 	// 	dst = src.Get(0);
 
@@ -141,7 +141,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Min(const test::Vector& src, float& dst)
+	// void Min(const VectorCPU& src, float& dst)
 	// {
 	// 	dst = src.Get(0);
 
@@ -151,13 +151,13 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void MinMax(const test::Vector& src, float& min, float& max)
+	// void MinMax(const VectorCPU& src, float& min, float& max)
 	// {
 	// 	Min(src, min);
 	// 	Max(src, max);
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Mul(const test::Vector& src1, const test::Vector& src2, test::Vector& dst)
+	// void Mul(const VectorCPU& src1, const VectorCPU& src2, VectorCPU& dst)
 	// {
 	// 	for (int l = 0; l < src1.Length(); l++)
 	// 	{
@@ -166,7 +166,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Norm(const test::Vector& src, qlm::Norm norm, float& dst)
+	// void Norm(const VectorCPU& src, qlm::Norm norm, float& dst)
 	// {
 	// 	if (norm == qlm::Norm::L1_NORM)
 	// 	{
@@ -186,7 +186,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void ScalarAdd(const test::Vector& src1, const float val, test::Vector& dst)
+	// void ScalarAdd(const VectorCPU& src1, const float val, VectorCPU& dst)
 	// {
 	// 	for (int l = 0; l < src1.Length(); l++)
 	// 	{
@@ -195,7 +195,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void ScalarDiv(const test::Vector& src1, const float val, test::Vector& dst)
+	// void ScalarDiv(const VectorCPU& src1, const float val, VectorCPU& dst)
 	// {
 	// 	for (int l = 0; l < src1.Length(); l++)
 	// 	{
@@ -204,7 +204,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void ScalarMul(const test::Vector& src1, const float val, test::Vector& dst)
+	// void ScalarMul(const VectorCPU& src1, const float val, VectorCPU& dst)
 	// {
 	// 	for (int l = 0; l < src1.Length(); l++)
 	// 	{
@@ -213,7 +213,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void ScalarSub(const test::Vector& src1, const float val, test::Vector& dst)
+	// void ScalarSub(const VectorCPU& src1, const float val, VectorCPU& dst)
 	// {
 	// 	for (int l = 0; l < src1.Length(); l++)
 	// 	{
@@ -222,7 +222,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Sub(const test::Vector& src1, const test::Vector& src2, test::Vector& dst)
+	// void Sub(const VectorCPU& src1, const VectorCPU& src2, VectorCPU& dst)
 	// {
 	// 	for (int l = 0; l < src1.Length(); l++)
 	// 	{
@@ -231,7 +231,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Sum(const test::Vector& src, float& dst)
+	// void Sum(const VectorCPU& src, float& dst)
 	// {
 	// 	dst = 0;
 	// 	for (int l = 0; l < src.Length(); l++)
@@ -240,7 +240,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Unit(const test::Vector& src, test::Vector& dst)
+	// void Unit(const VectorCPU& src, VectorCPU& dst)
 	// {
 	// 	float mag = 0;
 	// 	Mag(src, mag);
@@ -252,7 +252,7 @@ namespace test
 	// 	}
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void Var(const test::Vector& src, float& dst)
+	// void Var(const VectorCPU& src, float& dst)
 	// {
 	// 	float mean;
 	// 	Mean(src, mean);
@@ -265,7 +265,7 @@ namespace test
 	// 	dst = dst / (src.Length() - 1);
 	// }
 	// ///////////////////////////////////////////////////////////////////////////
-	// void WeightedSum(const test::Vector& src, const test::Vector& weights, const float bias, float& dst)
+	// void WeightedSum(const VectorCPU& src, const VectorCPU& weights, const float bias, float& dst)
 	// {
 	// 	Dot(src, weights, dst);
 	// 	dst += bias;

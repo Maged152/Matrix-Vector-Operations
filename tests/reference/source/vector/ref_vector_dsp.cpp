@@ -3,7 +3,7 @@
 
 namespace test
 {
-    void Conv(const Vector& input, const Vector& kernel, Vector& output, const qlm::ConvMode mode)
+    void Conv(const VectorCPU& input, const VectorCPU& kernel, VectorCPU& output, const qlm::ConvMode mode)
     {
         const int input_len = input.Length();
         const int kernel_len = kernel.Length();

@@ -1,12 +1,10 @@
 #pragma once
 
 #include <limits>
-#include "types.hpp"
+#include "ref_vector.hpp"
 
 namespace test
 {
-    class Vector;
-
     class Matrix 
     {
         public:
