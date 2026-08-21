@@ -14,9 +14,50 @@ namespace qlm
     template<MemType mem_type>
     class Vector 
     {
-        public:
+        private:
             float* data = nullptr;
             int length = 0;
+
+        private:
+            void Release()
+            {
+                if (data != nullptr)
+                {
+                    if constexpr (mem_type == MemType::MEM_CPU)
+                    {
+                        delete[] data;
+                    }
+                    else // MEM_GPU or MEM_UM
+                    {
+                        cudaFree(data);
+                    }
+                    data = nullptr;
+                }
+            }
+
+            void PrefetchToGPU() const
+            {
+                if constexpr (mem_type == MemType::MEM_UM)
+                {
+                    if (data != nullptr && length > 0)
+                    {
+                        int device_id = 0;
+                        cudaGetDevice(&device_id);
+                        cudaMemPrefetchAsync(data, length * sizeof(float), device_id);
+                    }
+                }
+            }
+
+            void PrefetchToCPU() const
+            {
+                if constexpr (mem_type == MemType::MEM_UM)
+                {
+                    if (data != nullptr && length > 0)
+                    {
+                        cudaMemPrefetchAsync(data, length * sizeof(float), cudaCpuDeviceId);
+                    }
+                }
+            }
 
         public:
             Vector() = default;
@@ -42,6 +83,9 @@ namespace qlm
             }
 
         public:
+            float* Data() { return data; }
+            const float* Data() const { return data; }
+
             void Set(const int i, const float value)
             {
                 if (i >= 0 && i < length)
@@ -160,47 +204,6 @@ namespace qlm
                 for (int i = 0; i < length; i++)
                 {
                     this->Set(i, dis(gen));
-                }
-            }
-
-        private:
-            void Release()
-            {
-                if (data != nullptr)
-                {
-                    if constexpr (mem_type == MemType::MEM_CPU)
-                    {
-                        delete[] data;
-                    }
-                    else // MEM_GPU or MEM_UM
-                    {
-                        cudaFree(data);
-                    }
-                    data = nullptr;
-                }
-            }
-
-            void PrefetchToGPU() const
-            {
-                if constexpr (mem_type == MemType::MEM_UM)
-                {
-                    if (data != nullptr && length > 0)
-                    {
-                        int device_id = 0;
-                        cudaGetDevice(&device_id);
-                        cudaMemPrefetchAsync(data, length * sizeof(float), device_id);
-                    }
-                }
-            }
-
-            void PrefetchToCPU() const
-            {
-                if constexpr (mem_type == MemType::MEM_UM)
-                {
-                    if (data != nullptr && length > 0)
-                    {
-                        cudaMemPrefetchAsync(data, length * sizeof(float), cudaCpuDeviceId);
-                    }
                 }
             }
     };

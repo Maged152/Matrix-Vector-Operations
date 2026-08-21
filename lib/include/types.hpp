@@ -28,21 +28,4 @@ namespace qlm
 		SAME,
 		FULL
 	};
-
-	struct DeviceBuffer
-    {
-        float* data;
-        size_t size = 0;
-
-        DeviceBuffer(size_t size);
-        ~DeviceBuffer();
-
-        void ToCPU(float* host_data) const;
-        void FromCPU(const float* host_data);
-    };
-
-	struct DeviceFloat
-    {
-		DeviceBuffer mem {1};
-    };
 }
