@@ -44,6 +44,7 @@ namespace qlm
             atomicAdd(result, partial_sum[0]);
         }
     }
+
     /*
      warp shuffle
       __global__ void VectorSum_Cuda(const float* in, const int length, float* result)
@@ -87,7 +88,8 @@ namespace qlm
     }
     */
 
-    void qlm::Sum(const Vector &src, DeviceFloat& result)
+    template<MemType mem_type>
+    void Sum(const Vector<mem_type>& src, DeviceFloat& result)
 	{
         const int length = src.Length();
         // Launch kernel
@@ -97,4 +99,7 @@ namespace qlm
         VectorSum_Cuda<<<num_blocks, block_size>>>(src.data, length, result.mem.data);
         cudaDeviceSynchronize();
 	}
+
+    template void Sum<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, DeviceFloat&);
+    template void Sum<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, DeviceFloat&);
 }

@@ -9,11 +9,15 @@ namespace qlm
         in[0] /= static_cast<float>(length);
     }
     
-    void qlm::Mean(const Vector &src, DeviceFloat& result)
+    template<MemType mem_type>
+    void Mean(const Vector<mem_type>& src, DeviceFloat& result)
 	{
-        qlm::Sum(src, result);
+        Sum(src, result);
         const int length = src.Length();  
         Div_Cuda<<<1, 1>>>(result.mem.data, length);
         cudaDeviceSynchronize();
     }
+
+    template void Mean<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, DeviceFloat&);
+    template void Mean<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, DeviceFloat&);
 }

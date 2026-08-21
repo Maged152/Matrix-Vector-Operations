@@ -98,7 +98,8 @@ namespace qlm
 		output[idx] = sum;
 	}
 
-    void qlm::Conv(const Vector& input, const Vector& kernel, Vector& output, const qlm::ConvMode mode)
+    template<MemType mem_type>
+    void Conv(const Vector<mem_type>& input, const Vector<mem_type>& kernel, Vector<mem_type>& output, const qlm::ConvMode mode)
 	{
 		const int input_length = input.Length();
 		const int kernel_length = kernel.Length();
@@ -136,4 +137,7 @@ namespace qlm
 		cudaDeviceSynchronize(); // Ensure the kernel execution is complete
   
 	}
+
+    template void Conv<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, const Vector<MemType::MEM_GPU>&, Vector<MemType::MEM_GPU>&, const qlm::ConvMode);
+    template void Conv<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, const Vector<MemType::MEM_UM>&, Vector<MemType::MEM_UM>&, const qlm::ConvMode);
 }

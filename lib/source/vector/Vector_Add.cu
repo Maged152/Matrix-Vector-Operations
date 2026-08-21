@@ -11,7 +11,8 @@ namespace qlm
         }
     }
 
-    void qlm::Add(const Vector &src0, const Vector &src1, Vector &dst)
+    template<MemType mem_type>
+    void Add(const Vector<mem_type>& src0, const Vector<mem_type>& src1, Vector<mem_type>& dst)
 	{
         const int length = std::min(src0.Length(), src1.Length());
         // Launch kernel
@@ -20,4 +21,7 @@ namespace qlm
         VectorAdd_Cuda<<<num_blocks, block_size>>>(src0.data, src1.data, dst.data, length);
         cudaDeviceSynchronize(); // Ensure the kernel execution is complete
 	}
+
+    template void Add<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, const Vector<MemType::MEM_GPU>&, Vector<MemType::MEM_GPU>&);
+    template void Add<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, const Vector<MemType::MEM_UM>&, Vector<MemType::MEM_UM>&);
 }
