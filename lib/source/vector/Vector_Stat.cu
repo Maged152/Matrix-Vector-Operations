@@ -10,14 +10,14 @@ namespace qlm
     }
     
     template<MemType mem_type>
-    void Mean(const Vector<mem_type>& src, DeviceFloat& result)
+    void Mean(const Vector<mem_type>& src, Array<1, mem_type>& result)
 	{
         Sum(src, result);
         const int length = src.Length();  
-        Div_Cuda<<<1, 1>>>(result.mem.data, length);
+        Div_Cuda<<<1, 1>>>(result.Data(), length);
         cudaDeviceSynchronize();
     }
 
-    template void Mean<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, DeviceFloat&);
-    template void Mean<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, DeviceFloat&);
+    template void Mean<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, Array<1, MemType::MEM_GPU>&);
+    template void Mean<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, Array<1, MemType::MEM_UM>&);
 }

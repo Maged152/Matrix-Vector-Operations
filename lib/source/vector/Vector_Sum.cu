@@ -89,17 +89,17 @@ namespace qlm
     */
 
     template<MemType mem_type>
-    void Sum(const Vector<mem_type>& src, DeviceFloat& result)
+    void Sum(const Vector<mem_type>& src, Array<1, mem_type>& result)
 	{
         const int length = src.Length();
         // Launch kernel
         const int block_size = BLOCK_SIZE;
         const int num_blocks = (length + (block_size * 2) - 1) / (block_size * 2);
         
-        VectorSum_Cuda<<<num_blocks, block_size>>>(src.data, length, result.mem.data);
+        VectorSum_Cuda<<<num_blocks, block_size>>>(src.Data(), length, result.Data());
         cudaDeviceSynchronize();
 	}
 
-    template void Sum<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, DeviceFloat&);
-    template void Sum<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, DeviceFloat&);
+    template void Sum<MemType::MEM_GPU>(const Vector<MemType::MEM_GPU>&, Array<1, MemType::MEM_GPU>&);
+    template void Sum<MemType::MEM_UM>(const Vector<MemType::MEM_UM>&, Array<1, MemType::MEM_UM>&);
 }

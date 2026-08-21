@@ -113,7 +113,7 @@ namespace qlm
 		if (kernel_length > input_length)
 			throw std::runtime_error("kernel length must be less than or equal to input length.");
 
-		cudaMemcpyToSymbol(CudaConstMem_ptr, kernel.data, kernel_length * sizeof(float));
+		cudaMemcpyToSymbol(CudaConstMem_ptr, kernel.Data(), kernel_length * sizeof(float));
 		
 		const int block_size = 256;
 		const int num_blocks = (output_length + block_size - 1) / block_size;
@@ -124,15 +124,15 @@ namespace qlm
 
 		// Launch kernel
 		if (mode == ConvMode::FULL)
-			VectorConvFull_Cuda<<<num_blocks, block_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+			VectorConvFull_Cuda<<<num_blocks, block_size>>>(input.Data(), input_length, kernel_length, output.Data(), output_length);
 		else if (mode == ConvMode::SAME) {
 			if (use_shared_mem)
-				VectorConvSame_CudaSM<<<num_blocks, block_size, shared_mem_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+				VectorConvSame_CudaSM<<<num_blocks, block_size, shared_mem_size>>>(input.Data(), input_length, kernel_length, output.Data(), output_length);
 			else
-				VectorConvSame_Cuda<<<num_blocks, block_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+				VectorConvSame_Cuda<<<num_blocks, block_size>>>(input.Data(), input_length, kernel_length, output.Data(), output_length);
 		}
 		else // mode == ConvMode::VALID
-			VectorConvValid_Cuda<<<num_blocks, block_size>>>(input.data, input_length, kernel_length, output.data, output_length);
+			VectorConvValid_Cuda<<<num_blocks, block_size>>>(input.Data(), input_length, kernel_length, output.Data(), output_length);
 
 		cudaDeviceSynchronize(); // Ensure the kernel execution is complete
   

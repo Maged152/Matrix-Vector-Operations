@@ -18,7 +18,7 @@ namespace qlm
         // Launch kernel
         const int block_size = 256;
         const int num_blocks = (length + block_size - 1) / block_size;
-        VectorAdd_Cuda<<<num_blocks, block_size>>>(src0.data, src1.data, dst.data, length);
+        VectorAdd_Cuda<<<num_blocks, block_size>>>(src0.Data(), src1.Data(), dst.Data(), length);
         cudaDeviceSynchronize(); // Ensure the kernel execution is complete
 	}
 
