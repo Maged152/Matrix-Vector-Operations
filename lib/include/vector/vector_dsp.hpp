@@ -3,6 +3,7 @@
 
 namespace qlm
 {
-    void Conv(const Vector& input, const Vector& kernel, Vector& output, const qlm::ConvMode mode);
+    template<MemType mem_type>
+    void Conv(const Vector<mem_type>& input, const Vector<mem_type>& kernel, Vector<mem_type>& output, const qlm::ConvMode mode);
     
 }
