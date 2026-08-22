@@ -19,6 +19,48 @@ namespace test
 	template void test::Add<qlm::MemType::MEM_UM>(const VectorUM&, const VectorUM&, VectorUM&);
 	///////////////////////////////////////////////////////////////////////////
 	template<qlm::MemType mem_type>
+	void test::Sub(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst)
+	{
+		const int len =std::min(src0.Length(), src1.Length());
+		for (int l = 0; l < len; l++)
+		{
+			const float res = src0.Get(l) - src1.Get(l);
+			dst.Set(l, res);
+		}
+	}
+
+	template void test::Sub<qlm::MemType::MEM_CPU>(const VectorCPU&, const VectorCPU&, VectorCPU&);	
+	template void test::Sub<qlm::MemType::MEM_UM>(const VectorUM&, const VectorUM&, VectorUM&);
+	///////////////////////////////////////////////////////////////////////////
+	template<qlm::MemType mem_type>
+	void test::Mul(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst)
+	{
+		const int len =std::min(src0.Length(), src1.Length());
+		for (int l = 0; l < len; l++)
+		{
+			const float res = src0.Get(l) * src1.Get(l);
+			dst.Set(l, res);
+		}
+	}
+
+	template void test::Mul<qlm::MemType::MEM_CPU>(const VectorCPU&, const VectorCPU&, VectorCPU&);	
+	template void test::Mul<qlm::MemType::MEM_UM>(const VectorUM&, const VectorUM&, VectorUM&);
+	///////////////////////////////////////////////////////////////////////////
+	template<qlm::MemType mem_type>
+	void test::Div(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst)
+	{
+		const int len =std::min(src0.Length(), src1.Length());
+		for (int l = 0; l < len; l++)
+		{
+			const float res = src0.Get(l) / src1.Get(l);
+			dst.Set(l, res);
+		}
+	}
+
+	template void test::Div<qlm::MemType::MEM_CPU>(const VectorCPU&, const VectorCPU&, VectorCPU&);	
+	template void test::Div<qlm::MemType::MEM_UM>(const VectorUM&, const VectorUM&, VectorUM&);
+	///////////////////////////////////////////////////////////////////////////
+	template<qlm::MemType mem_type>
 	void test::Sum(const qlm::Vector<mem_type>& src, float& dst)
 	{
 		dst = 0;
