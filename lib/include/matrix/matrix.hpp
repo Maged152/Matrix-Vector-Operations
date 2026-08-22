@@ -5,8 +5,6 @@
 
 namespace qlm
 {
-    class Vector;
-
     class Matrix 
     {
         public:
