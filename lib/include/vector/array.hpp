@@ -27,6 +27,9 @@ namespace qlm
         void FromCPU(const float* src) { vec.FromCPU(src, N); }
         void ToCPU(float* dst) const { vec.ToCPU(dst, N); }
 
+        void PrefetchToGPU() const { vec.PrefetchToGPU(); }
+        void PrefetchToCPU() const { vec.PrefetchToCPU(); }
+
         void Print() const { vec.Print(); }
         void RandomInit(const float min_value, const float max_value) { vec.RandomInit(min_value, max_value); }
     };
