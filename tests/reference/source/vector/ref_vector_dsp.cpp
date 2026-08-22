@@ -3,7 +3,9 @@
 
 namespace test
 {
-    void Conv(const VectorCPU& input, const VectorCPU& kernel, VectorCPU& output, const qlm::ConvMode mode)
+    
+    template<qlm::MemType mem_type>
+    void Conv(const qlm::Vector<mem_type>& input, const qlm::Vector<mem_type>& kernel, qlm::Vector<mem_type>& output, const qlm::ConvMode mode)
     {
         const int input_len = input.Length();
         const int kernel_len = kernel.Length();
@@ -44,4 +46,6 @@ namespace test
         }
     }
 
+    template void Conv<qlm::MemType::MEM_CPU>(const VectorCPU&, const VectorCPU&, VectorCPU&, const qlm::ConvMode);
+    template void Conv<qlm::MemType::MEM_UM>(const VectorUM&, const VectorUM&, VectorUM&, const qlm::ConvMode);
 }

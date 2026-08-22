@@ -4,7 +4,8 @@
 
 namespace test
 {
-	void test::Add(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst)
+	template<qlm::MemType mem_type>
+	void test::Add(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst)
 	{
 		const int len =std::min(src0.Length(), src1.Length());
 		for (int l = 0; l < len; l++)
@@ -13,8 +14,12 @@ namespace test
 			dst.Set(l, res);
 		}
 	}
+
+	template void test::Add<qlm::MemType::MEM_CPU>(const VectorCPU&, const VectorCPU&, VectorCPU&);	
+	template void test::Add<qlm::MemType::MEM_UM>(const VectorUM&, const VectorUM&, VectorUM&);
 	///////////////////////////////////////////////////////////////////////////
-	void test::Sum(const VectorCPU& src, float& dst)
+	template<qlm::MemType mem_type>
+	void test::Sum(const qlm::Vector<mem_type>& src, float& dst)
 	{
 		dst = 0;
 		for (int l = 0; l < src.Length(); l++)
@@ -22,12 +27,19 @@ namespace test
 			dst += src.Get(l);
 		}
 	}
+
+	template void test::Sum<qlm::MemType::MEM_CPU>(const VectorCPU&, float&);	
+	template void test::Sum<qlm::MemType::MEM_UM>(const VectorUM&, float&);
 	/////////////////////////////////////////////////////////////////////////
-	void test::Mean(const VectorCPU& src, float& dst)
+	template<qlm::MemType mem_type>
+	void test::Mean(const qlm::Vector<mem_type>& src, float& dst)
 	{
 		Sum(src, dst);
-		dst /= src.Length();
+			dst /= src.Length();
 	}
+
+	template void test::Mean<qlm::MemType::MEM_CPU>(const VectorCPU&, float&);	
+	template void test::Mean<qlm::MemType::MEM_UM>(const VectorUM&, float&);
 	// ///////////////////////////////////////////////////////////////////////////
 	// void Angle(const VectorCPU& src1, const VectorCPU& src2, float& angle)
 	// {

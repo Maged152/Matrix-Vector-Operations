@@ -43,11 +43,11 @@ namespace test
     void Transpose(const Matrix& src, Matrix& dst);
 
     // matrix-vector operations
-    void Add(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
-    void Sub(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
-    void Mul(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
-    void Div(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
-    void Dot(const Matrix& src0, const Vector& src1, Vector& dst);
+    // void Add(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    // void Sub(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    // void Mul(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    // void Div(const Matrix& src0, const Vector& src1, Matrix& dst, const qlm::BroadCast& broad_cast);
+    // void Dot(const Matrix& src0, const Vector& src1, Vector& dst);
 
     // matrix-scalar operations
     void Add(const Matrix& src0, const float src, Matrix& dst);

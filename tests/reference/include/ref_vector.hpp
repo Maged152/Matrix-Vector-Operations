@@ -1,44 +1,91 @@
 #pragma once
 
 #include <limits>
-#include "vector/vector.hpp"
+#include "vector/array.hpp"
 
 namespace test
 {
-    // CPU reference vector type alias
     using VectorCPU = qlm::Vector<qlm::MemType::MEM_CPU>;
-
+    using VectorUM = qlm::Vector<qlm::MemType::MEM_UM>;
+    
     // vector-vector operations
-    void Add(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
-    void Sub(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
-    void Mul(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
-    void Div(const VectorCPU& src0, const VectorCPU& src1, VectorCPU& dst);
-    void Cov(const VectorCPU& src0, const VectorCPU& src1, float& dst);
-    void Corr(const VectorCPU& src0, const VectorCPU& src1, float& dst);
-    void Dot(const VectorCPU& src0, const VectorCPU& src1, float& dst);
-    void Angle(const VectorCPU& src0, const VectorCPU& src1, float& dst);
+    template<qlm::MemType mem_type>
+    void Add(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst);
+
+    template<qlm::MemType mem_type>
+    void Sub(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst);
+
+    template<qlm::MemType mem_type>
+    void Mul(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst);
+
+    template<qlm::MemType mem_type>
+    void Div(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, qlm::Vector<mem_type>& dst);
+    
+    template<qlm::MemType mem_type>
+    void Cov(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, float& dst);
+
+    template<qlm::MemType mem_type>
+    void Corr(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, float& dst);
+
+    template<qlm::MemType mem_type>
+    void Dot(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, float& dst);
+
+    template<qlm::MemType mem_type>
+    void Angle(const qlm::Vector<mem_type>& src0, const qlm::Vector<mem_type>& src1, float& dst);
 
     // vector operations
-    void Mag(const VectorCPU& src, float& dst);
-    void Unit(const VectorCPU& src, VectorCPU& dst);
-    void Sum(const VectorCPU& src, float& result);
-    void Mean(const VectorCPU& src, float& dst);
-    void Var(const VectorCPU& src, float& dst);
-    void Min(const VectorCPU& src, float& dst);
-    void Max(const VectorCPU& src, float& dst);
-    void MinMax(const VectorCPU& src, float& dst_min, float& dst_max);
-    void Norm(const VectorCPU& src, const qlm::Norm_t norm, float& dst);
-    void ArgMin(const VectorCPU& src, VectorCPU& dst);
-    void ArgMax(const VectorCPU& src, VectorCPU& dst);
-    void ArgMinMax(const VectorCPU& src, VectorCPU& dst_min,VectorCPU& dst_max);
-    void WeightedSum(const VectorCPU& src, const VectorCPU& weights, const float bias, float& dst);
+    template<qlm::MemType mem_type>
+    void Mag(const qlm::Vector<mem_type>& src, float& dst);
+
+    template<qlm::MemType mem_type>
+    void Unit(const qlm::Vector<mem_type>& src, qlm::Vector<mem_type>& dst);
+
+    template<qlm::MemType mem_type>
+    void Sum(const qlm::Vector<mem_type>& src, float& result);
+
+    template<qlm::MemType mem_type>
+    void Mean(const qlm::Vector<mem_type>& src, float& dst);
+    template<qlm::MemType mem_type>
+    void Var(const qlm::Vector<mem_type>& src, float& dst);
+
+    template<qlm::MemType mem_type>
+    void Min(const qlm::Vector<mem_type>& src, float& dst);
+    
+    template<qlm::MemType mem_type>
+    void Max(const qlm::Vector<mem_type>& src, float& dst);
+
+    template<qlm::MemType mem_type>
+    void MinMax(const qlm::Vector<mem_type>& src, float& dst_min, float& dst_max);
+
+    template<qlm::MemType mem_type>
+    void Norm(const qlm::Vector<mem_type>& src, const qlm::Norm_t norm, float& dst);
+
+    template<qlm::MemType mem_type>
+    void ArgMin(const qlm::Vector<mem_type>& src, VectorCPU& dst);
+
+    template<qlm::MemType mem_type>
+    void ArgMax(const qlm::Vector<mem_type>& src, VectorCPU& dst);
+
+    template<qlm::MemType mem_type>
+    void ArgMinMax(const qlm::Vector<mem_type>& src, VectorCPU& dst_min, VectorCPU& dst_max);
+
+    template<qlm::MemType mem_type>
+    void WeightedSum(const qlm::Vector<mem_type>& src, const qlm::Vector<mem_type>& weights, const float bias, float& dst);
                
     // Vector-scalar operations
-    void Add(const VectorCPU& in, const float& val, VectorCPU& dst);
-    void Sub(const VectorCPU& in, const float& val, VectorCPU& dst);
-    void Mul(const VectorCPU& in, const float& val, VectorCPU& dst);
-    void Div(const VectorCPU& in, const float& val, VectorCPU& dst);
+    template<qlm::MemType mem_type>
+    void Add(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst);
+
+    template<qlm::MemType mem_type>
+    void Sub(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst);
+
+    template<qlm::MemType mem_type>
+    void Mul(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst);
+    
+    template<qlm::MemType mem_type>
+    void Div(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst);
 
     // vector dsp operations
-    void Conv(const VectorCPU& input, const VectorCPU& kernel, VectorCPU& output, const qlm::ConvMode mode);
+    template<qlm::MemType mem_type>
+    void Conv(const qlm::Vector<mem_type>& input, const qlm::Vector<mem_type>& kernel, qlm::Vector<mem_type>& output, const qlm::ConvMode mode);
 }

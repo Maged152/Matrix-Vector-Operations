@@ -28,37 +28,29 @@ TEST_P(VectorMean, Test_VectorMean)
     qlm::Timer<qlm::usec> timer_gpu;
 
     float dst_cpu;
-    qlm::DeviceFloat dst_gpu;
+    qlm::Array<1, qlm::MemType::MEM_UM> dst_gpu;
 
-    // cpu vector
-    test::Vector src_cpu{ length };
-
-    // gpu vectors
-    qlm::Vector src_gpu{ length };
+    // input vector
+    qlm::Vector<qlm::MemType::MEM_UM> src{ length };
 
     // random initialization
-    src_cpu.RandomInit(min_val, max_val);
-
-    // copy to gpu
-    src_gpu.FromCPU(src_cpu.data, length);
+    src.RandomInit(min_val, max_val);
 
     // run cpu code
     timer_cpu.Start();
-    test::Mean(src_cpu, dst_cpu);
+    test::Mean(src, dst_cpu);
     timer_cpu.End();
 
     // run gpu code
     timer_gpu.Start();
-    qlm::Mean(src_gpu, dst_gpu);
+    qlm::Mean(src, dst_gpu);
     timer_gpu.End();
 
     // print time
     test::PrintTime(timer_cpu, timer_gpu);
 
     // compare the results
-    float dst_gpu_cpu;
-    dst_gpu.mem.ToCPU(&dst_gpu_cpu);
-    bool res = test::TestCompare_SNR(dst_cpu, dst_gpu_cpu, threshold);
+    bool res = test::TestCompare_SNR(dst_cpu, dst_gpu, threshold);
 
     EXPECT_EQ(res, true);
 }

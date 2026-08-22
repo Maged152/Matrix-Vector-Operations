@@ -27,32 +27,26 @@ TEST_P(VectorAdd, Test_VectorAdd)
     qlm::Timer<qlm::usec> timer_cpu;
     qlm::Timer<qlm::usec> timer_gpu;
 
-    // cpu vectors
-    test::Vector src1_cpu{ length };
-    test::Vector src2_cpu{ length };
-    test::Vector dst_cpu{ length };
+    // input vectors
+    qlm::Vector<qlm::MemType::MEM_UM> src1{ length };
+    qlm::Vector<qlm::MemType::MEM_UM> src2{ length };
 
-    // gpu vectors
-    qlm::Vector src1_gpu{ length };
-    qlm::Vector src2_gpu{ length };
-    qlm::Vector dst_gpu{ length };
+    // output vectors
+    qlm::Vector<qlm::MemType::MEM_UM> dst_cpu{ length };
+    qlm::Vector<qlm::MemType::MEM_UM> dst_gpu{ length };
 
     // random initialization
-    src1_cpu.RandomInit(min_val, max_val);
-    src2_cpu.RandomInit(min_val, max_val);
-
-    // copy to gpu
-    src1_gpu.FromCPU(src1_cpu.data, length);
-    src2_gpu.FromCPU(src2_cpu.data, length);
+    src1.RandomInit(min_val, max_val);
+    src2.RandomInit(min_val, max_val);
 
     // run cpu code
     timer_cpu.Start();
-    test::Add(src1_cpu, src2_cpu, dst_cpu);
+    test::Add(src1, src2, dst_cpu);
     timer_cpu.End();
 
     // run gpu code
     timer_gpu.Start();
-    qlm::Add(src1_gpu, src2_gpu, dst_gpu);
+    qlm::Add(src1, src2, dst_gpu);
     timer_gpu.End();
 
     // print time

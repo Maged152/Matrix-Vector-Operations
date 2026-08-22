@@ -31,35 +31,29 @@ TEST_P(VectorConv, Test_VectorConv)
     else if (mode == qlm::ConvMode::VALID)
         output_length = std::max(0, input_length - kernel_length + 1);
 
-    // CPU vectors
-    test::Vector input_cpu{ input_length };
-    test::Vector kernel_cpu{ kernel_length };
-    test::Vector output_cpu{ output_length };
+    // input vectors
+    qlm::Vector<qlm::MemType::MEM_UM> input{ input_length };
+    qlm::Vector<qlm::MemType::MEM_UM> kernel{ kernel_length };
 
-    // GPU vectors
-    qlm::Vector input_gpu{ input_length };
-    qlm::Vector kernel_gpu{ kernel_length };
-    qlm::Vector output_gpu{ output_length };
+    // output vectors
+    qlm::Vector<qlm::MemType::MEM_UM> output_cpu{ output_length };
+    qlm::Vector<qlm::MemType::MEM_UM> output_gpu{ output_length };
 
     // Random initialization
-    input_cpu.RandomInit(min_val, max_val);
-    kernel_cpu.RandomInit(min_val, max_val);
+    input.RandomInit(min_val, max_val);
+    kernel.RandomInit(min_val, max_val);
 
     qlm::Timer<qlm::usec> timer_cpu;
     qlm::Timer<qlm::usec> timer_gpu;
 
-    // Copy to GPU
-    input_gpu.FromCPU(input_cpu.data, input_length);
-    kernel_gpu.FromCPU(kernel_cpu.data, kernel_length);
-
     // Run CPU code
     timer_cpu.Start();
-    test::Conv(input_cpu, kernel_cpu, output_cpu, mode);
+    test::Conv(input, kernel, output_cpu, mode);
     timer_cpu.End();
 
     // Run GPU code
     timer_gpu.Start();
-    qlm::Conv(input_gpu, kernel_gpu, output_gpu, mode);
+    qlm::Conv(input, kernel, output_gpu, mode);
     timer_gpu.End();
 
     // Print time

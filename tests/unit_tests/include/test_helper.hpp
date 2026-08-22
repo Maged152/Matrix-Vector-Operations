@@ -29,7 +29,7 @@
 namespace test
 {
 	// float to int
-	inline void Float2Int(qlm::Vector& in)
+	inline void Float2Int(qlm::Vector<qlm::MemType::MEM_UM>& in)
 	{
 		for (int i = 0; i < in.Length(); i++)
 		{
@@ -37,6 +37,7 @@ namespace test
 			in.Set(i, element);
 		}
 	}
+
 	// print
 	template<typename T>
 	inline void PrintParameter(T parameter, const std::string& para_name)
@@ -99,14 +100,11 @@ namespace test
 		return true;
 	}
 
-	inline bool TestCompare(const test::Vector& vec1, const qlm::Vector& vec2, const float threshold)
+	inline bool TestCompare(const qlm::Vector<qlm::MemType::MEM_UM>& vec1, const qlm::Vector<qlm::MemType::MEM_UM>& vec2, const float threshold)
 	{
-		test::Vector vec_gpu{ vec2.Length() };
-		vec2.ToCPU(vec_gpu.data, vec_gpu.Length());
-
 		for (int i = 0; i < vec1.Length(); i++)
 		{
-			if (std::abs(vec1.Get(i) - vec_gpu.Get(i)) > threshold)
+			if (std::abs(vec1.Get(i) - vec2.Get(i)) > threshold)
 			{
 				return false;
 			}
@@ -125,22 +123,19 @@ namespace test
 		return true;
 	}
 
-	inline bool TestCompare_SNR(const test::Vector& ref, const qlm::Vector& test, float snr_threshold_db)
+	inline bool TestCompare_SNR(const qlm::Vector<qlm::MemType::MEM_UM>& ref, const qlm::Vector<qlm::MemType::MEM_UM>& src, float snr_threshold_db)
 	{
-		test::Vector test_cpu{ test.Length() };
-		test.ToCPU(test_cpu.data, test_cpu.Length());
-
 		double signal_energy = 0.0;
 		double noise_energy = 0.0;
 
 		for (int i = 0; i < ref.Length(); ++i)
 		{
 			float ref_val = ref.Get(i);
-			float test_val = test_cpu.Get(i);
+			float src_val = src.Get(i);
 
 			signal_energy += ref_val * ref_val;
 
-			float noise = ref_val - test_val;
+			float noise = ref_val - src_val;
 			noise_energy += noise * noise;
 		}
 
@@ -158,10 +153,10 @@ namespace test
 	}
 
 	// SNR compare for scalars
-	inline bool TestCompare_SNR(float ref, float test, float snr_threshold_db)
+	inline bool TestCompare_SNR(float ref, const qlm::Array<1, qlm::MemType::MEM_UM>& test, float snr_threshold_db)
 	{
 		double signal_energy = ref * ref;
-		double noise_energy = (ref - test) * (ref - test);
+		double noise_energy = (ref - test.Get(0)) * (ref - test.Get(0));
 
 		if (noise_energy == 0.0)
 		{
