@@ -15,6 +15,15 @@ namespace qlm
     void Add(const Vector<mem_type>& src0, const Vector<mem_type>& src1, Vector<mem_type>& dst)
 	{
         const int length = std::min(src0.Length(), src1.Length());
+
+        if constexpr (mem_type == qlm::MemType::MEM_UM)
+        {
+            // Prefetch data to GPU
+            src0.PrefetchToGPU();
+            src1.PrefetchToGPU();
+            dst.PrefetchToGPU();
+        }
+        
         // Launch kernel
         const int block_size = 256;
         const int num_blocks = (length + block_size - 1) / block_size;

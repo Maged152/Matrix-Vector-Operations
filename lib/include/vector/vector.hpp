@@ -18,7 +18,6 @@ namespace qlm
             float* data = nullptr;
             int length = 0;
 
-        private:
             void Release()
             {
                 if (data != nullptr)
@@ -32,30 +31,6 @@ namespace qlm
                         cudaFree(data);
                     }
                     data = nullptr;
-                }
-            }
-
-            void PrefetchToGPU() const
-            {
-                if constexpr (mem_type == MemType::MEM_UM)
-                {
-                    if (data != nullptr && length > 0)
-                    {
-                        int device_id = 0;
-                        cudaGetDevice(&device_id);
-                        cudaMemPrefetchAsync(data, length * sizeof(float), device_id);
-                    }
-                }
-            }
-
-            void PrefetchToCPU() const
-            {
-                if constexpr (mem_type == MemType::MEM_UM)
-                {
-                    if (data != nullptr && length > 0)
-                    {
-                        cudaMemPrefetchAsync(data, length * sizeof(float), cudaCpuDeviceId);
-                    }
                 }
             }
 
@@ -171,6 +146,30 @@ namespace qlm
                     else // MEM_UM or MEM_CPU
                     {
                         std::memcpy(dst, data, length * sizeof(float));
+                    }
+                }
+            }
+
+            void PrefetchToGPU() const
+            {
+                if constexpr (mem_type == MemType::MEM_UM)
+                {
+                    if (data != nullptr && length > 0)
+                    {
+                        int device_id = 0;
+                        cudaGetDevice(&device_id);
+                        cudaMemPrefetchAsync(data, length * sizeof(float), device_id);
+                    }
+                }
+            }
+
+            void PrefetchToCPU() const
+            {
+                if constexpr (mem_type == MemType::MEM_UM)
+                {
+                    if (data != nullptr && length > 0)
+                    {
+                        cudaMemPrefetchAsync(data, length * sizeof(float), cudaCpuDeviceId);
                     }
                 }
             }

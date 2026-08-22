@@ -105,6 +105,14 @@ namespace qlm
 		const int kernel_length = kernel.Length();
 		const int output_length = output.Length();
 
+		if constexpr (mem_type == qlm::MemType::MEM_UM)
+		{
+			// Prefetch data to GPU
+			input.PrefetchToGPU();
+			kernel.PrefetchToGPU();
+			output.PrefetchToGPU();
+		}
+
 		// copy kernel to constant memory
 		if (kernel_length * sizeof(float) > USED_CONST_MEM_BYTES)
 			throw std::runtime_error("Kernel size exceeds constant memory limit.");

@@ -92,6 +92,14 @@ namespace qlm
     void Sum(const Vector<mem_type>& src, Array<1, mem_type>& result)
 	{
         const int length = src.Length();
+
+        if constexpr (mem_type == qlm::MemType::MEM_UM)
+        {
+            // Prefetch data to GPU
+            src.PrefetchToGPU();
+            result.PrefetchToGPU();
+        }
+        
         // Launch kernel
         const int block_size = BLOCK_SIZE;
         const int num_blocks = (length + (block_size * 2) - 1) / (block_size * 2);
