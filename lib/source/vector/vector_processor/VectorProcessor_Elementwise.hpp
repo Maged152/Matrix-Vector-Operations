@@ -21,6 +21,17 @@ namespace qlm
         }
     }
 
+    // ---- Generic vector-scalar elementwise kernel ----
+    template<auto Op>
+    __global__ void VectorScalarElementwise_Cuda(const float* in, const float val, float* out, const int length)
+    {
+        const int tid = blockIdx.x * blockDim.x + threadIdx.x;
+        if (tid < length)
+        {
+            out[tid] = Op(in[tid], val);
+        }
+    }
+
     // ---- Generic host-side dispatcher ----
     template<MemType mem_type, auto Op>
     static inline void VectorProcessor_Elementwise(const Vector<mem_type>& src0, const Vector<mem_type>& src1, Vector<mem_type>& dst)
@@ -37,6 +48,25 @@ namespace qlm
         const int block_size = 256;
         const int num_blocks = (length + block_size - 1) / block_size;
         VectorElementwise_Cuda<Op><<<num_blocks, block_size>>>(src0.Data(), src1.Data(), dst.Data(), length);
+        cudaDeviceSynchronize();
+    }
+
+    // ---- Generic host-side dispatcher (vector-scalar) ----
+    template<MemType mem_type, auto Op>
+    static inline void VectorProcessor_Elementwise(const Vector<mem_type>& src, const Array<1, mem_type>& val, Vector<mem_type>& dst)
+    {
+        const int length = src.Length();
+
+        if constexpr (mem_type == MemType::MEM_UM)
+        {
+            src.PrefetchToGPU();
+            val.PrefetchToGPU();
+            dst.PrefetchToGPU();
+        }
+
+        const int block_size = 256;
+        const int num_blocks = (length + block_size - 1) / block_size;
+        VectorScalarElementwise_Cuda<Op><<<num_blocks, block_size>>>(src.Data(), val.Get(0), dst.Data(), length);
         cudaDeviceSynchronize();
     }
 }

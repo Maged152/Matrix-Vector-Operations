@@ -61,6 +61,58 @@ namespace test
 	template void test::Div<qlm::MemType::MEM_UM>(const VectorUM&, const VectorUM&, VectorUM&);
 	///////////////////////////////////////////////////////////////////////////
 	template<qlm::MemType mem_type>
+	void test::Add(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst)
+	{
+		for (int l = 0; l < in.Length(); l++)
+		{
+			const float res = in.Get(l) + val;
+			dst.Set(l, res);
+		}
+	}
+
+	template void test::Add<qlm::MemType::MEM_CPU>(const VectorCPU&, const float&, VectorCPU&);	
+	template void test::Add<qlm::MemType::MEM_UM>(const VectorUM&, const float&, VectorUM&);
+	///////////////////////////////////////////////////////////////////////////
+	template<qlm::MemType mem_type>
+	void test::Sub(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst)
+	{
+		for (int l = 0; l < in.Length(); l++)
+		{
+			const float res = in.Get(l) - val;
+			dst.Set(l, res);
+		}
+	}
+
+	template void test::Sub<qlm::MemType::MEM_CPU>(const VectorCPU&, const float&, VectorCPU&);	
+	template void test::Sub<qlm::MemType::MEM_UM>(const VectorUM&, const float&, VectorUM&);
+	///////////////////////////////////////////////////////////////////////////
+	template<qlm::MemType mem_type>
+	void test::Mul(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst)
+	{
+		for (int l = 0; l < in.Length(); l++)
+		{
+			const float res = in.Get(l) * val;
+			dst.Set(l, res);
+		}
+	}
+
+	template void test::Mul<qlm::MemType::MEM_CPU>(const VectorCPU&, const float&, VectorCPU&);	
+	template void test::Mul<qlm::MemType::MEM_UM>(const VectorUM&, const float&, VectorUM&);
+	///////////////////////////////////////////////////////////////////////////
+	template<qlm::MemType mem_type>
+	void test::Div(const qlm::Vector<mem_type>& in, const float& val, qlm::Vector<mem_type>& dst)
+	{
+		for (int l = 0; l < in.Length(); l++)
+		{
+			const float res = in.Get(l) / val;
+			dst.Set(l, res);
+		}
+	}
+
+	template void test::Div<qlm::MemType::MEM_CPU>(const VectorCPU&, const float&, VectorCPU&);	
+	template void test::Div<qlm::MemType::MEM_UM>(const VectorUM&, const float&, VectorUM&);
+	///////////////////////////////////////////////////////////////////////////
+	template<qlm::MemType mem_type>
 	void test::Sum(const qlm::Vector<mem_type>& src, float& dst)
 	{
 		dst = 0;
